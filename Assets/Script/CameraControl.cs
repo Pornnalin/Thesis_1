@@ -30,29 +30,99 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         Debug.Log("Count =" + count);
+        RunNumber();
+
+        //if (Input.GetKeyDown(KeyCode.Mouse1))
+        //{
+        //    currentView = view[1];
+        //    switchInput = false;
+        //}
+        //if (Input.GetKeyDown(KeyCode.Mouse2))
+        //{
+        //    currentView = view[0];
+        //    switchInput = false;
+        //}
+        //if (Input.GetKeyDown(KeyCode.Mouse0))
+        //{
+        //    currentView = view[2];
+        //    switchInput = true;
+        //}
+        switch (count)
+        {
+            case -1:
+                currentView = view[1];
+                switchInput = false;
+                break;
+
+            case 0:
+                currentView = view[0];
+                switchInput = false;
+                break;
+
+            case 1:
+
+                currentView = view[2];
+                switchInput = true;
+                break;
 
 
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            currentView = view[2];
-            switchInput = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Mouse2))
-        {
-            currentView = view[0];
-            switchInput = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            currentView = view[1];
-            switchInput = true;
         }
 
 
         //ControlCamera();
     }
+    
+    public void RunNumber()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && count == 0) 
+        {
+            count = 1;
 
-   
+            
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && count == 0)
+        {
+            count = -1;
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && count == 1) 
+        {
+            count -= 1;
+            Debug.Log(count + "test2");
+            
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse0) && count == -1)
+        {
+            count += 1;
+            Debug.Log(count + "test3");
+
+        }
+
+       
+       
+
+
+        //if (Input.GetKeyDown(KeyCode.Mouse1))
+        //{
+        //    count =- 1;
+        //    if (Input.GetKeyDown(KeyCode.Mouse0))
+        //    {
+        //        count = 0;
+        //        Debug.Log("test2");
+        //    }
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.Mouse1) && count == -1)
+        //{
+        //    count = 0;
+        //}
+        //if (Input.GetKeyDown(KeyCode.Mouse0) && count == 1)
+        //{
+        //    count = 0;
+        //}
+    }
 
     private void LateUpdate()
     {
