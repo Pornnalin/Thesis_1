@@ -1233,6 +1233,7 @@ MonoBehaviour:
   someBoxs: {fileID: 1060175410}
   current: {fileID: 1318501237}
   cameraControl: {fileID: 2143079666}
+  isControlPlayer: 0
 --- !u!1 &1318135425
 GameObject:
   m_ObjectHideFlags: 0
@@ -3511,7 +3512,6 @@ GameObject:
   - component: {fileID: 1546276724}
   - component: {fileID: 1546276726}
   - component: {fileID: 1546276725}
-  - component: {fileID: 1546276727}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -3567,7 +3567,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2.56
+  orthographic size: 6.29
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -3583,24 +3583,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &1546276727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1546276723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3123cdfbc0495b4fb68e3d1dc3b6754, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTraform: {fileID: 1318501237}
-  lookTarget: {fileID: 1318501237}
-  cameraTaget: {fileID: 1318501237}
-  speed: 10
-  distanceFromObject: 6
-  smooth: 0.5
 --- !u!1 &1640389639
 GameObject:
   m_ObjectHideFlags: 0

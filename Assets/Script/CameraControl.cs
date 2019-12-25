@@ -51,7 +51,7 @@ public class CameraControl : MonoBehaviour
         {
             case -1:
                 currentView = view[1];
-                switchInput = false;
+                switchInput = true;
                 break;
 
             case 0:
@@ -62,7 +62,7 @@ public class CameraControl : MonoBehaviour
             case 1:
 
                 currentView = view[2];
-                switchInput = true;
+                switchInput = false;
                 break;
 
 
@@ -104,24 +104,7 @@ public class CameraControl : MonoBehaviour
        
 
 
-        //if (Input.GetKeyDown(KeyCode.Mouse1))
-        //{
-        //    count =- 1;
-        //    if (Input.GetKeyDown(KeyCode.Mouse0))
-        //    {
-        //        count = 0;
-        //        Debug.Log("test2");
-        //    }
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.Mouse1) && count == -1)
-        //{
-        //    count = 0;
-        //}
-        //if (Input.GetKeyDown(KeyCode.Mouse0) && count == 1)
-        //{
-        //    count = 0;
-        //}
+       
     }
 
     private void LateUpdate()

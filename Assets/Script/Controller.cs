@@ -13,6 +13,7 @@ public class Controller : MonoBehaviour
     public SomeBoxs someBoxs;
     public Transform current;
     public CameraControl cameraControl;
+    public bool isControlPlayer;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +29,7 @@ public class Controller : MonoBehaviour
     {
         if (cameraControl.switchInput == false) 
         {
+            isControlPlayer = true;
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
             m_Movement.Set(horizontal, 0f, vertical);
@@ -41,13 +43,14 @@ public class Controller : MonoBehaviour
 
             Vector3 desireForward = Vector3.RotateTowards(transform.forward, m_Movement, tureSpeed * Time.deltaTime, 0f);
             m_Rotation = Quaternion.LookRotation(desireForward);
+
         }
         else
         {
             Debug.Log(cameraControl.switchInput);
             Debug.Log("switchInput");
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
+            float horizontal = Input.GetAxis("Horizontal_Inverst");
+            float vertical = Input.GetAxis("Vertical_Inverst");
             m_Movement.Set(horizontal, 0f, vertical );
             m_Movement.Normalize();
 
@@ -71,6 +74,8 @@ public class Controller : MonoBehaviour
         //anim.SetFloat("Strafe", vertical);
 
     }
+
+   
     public void Update()
     {
         StartPickup();
