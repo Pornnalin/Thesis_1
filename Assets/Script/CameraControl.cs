@@ -13,7 +13,9 @@ public class CameraControl : MonoBehaviour
     public Transform currentView;
     public bool switchInput;
     int count = 0;
-   
+    //public GameObject player;
+    //private Vector3 offset;//distance between the player's position and camera's position.
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +25,7 @@ public class CameraControl : MonoBehaviour
         //gameOjectTaget2.SetActive(false);
         currentView = GetComponent<Transform>();
         switchInput = false;
-       
+        //offset = transform.position - player.transform.position;
     }
 
     // Update is called once per frame
@@ -109,6 +111,7 @@ public class CameraControl : MonoBehaviour
 
     private void LateUpdate()
     {
+        //transform.position = player.transform.position + offset;
         transform.position = Vector3.Lerp(transform.position, currentView.position, Time.deltaTime * traitionSpeed);
         Vector3 currentAngle = new Vector3(
             Mathf.LerpAngle(transform.rotation.eulerAngles.x, currentView.transform.rotation.eulerAngles.x, Time.deltaTime * traitionSpeed),
@@ -116,9 +119,9 @@ public class CameraControl : MonoBehaviour
             Mathf.LerpAngle(transform.rotation.eulerAngles.z, currentView.transform.rotation.eulerAngles.z, Time.deltaTime * traitionSpeed));
 
         transform.eulerAngles = currentAngle;
+        
 
-       
-       
+
 
     }
 
