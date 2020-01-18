@@ -40,8 +40,8 @@ public class SomeBoxs : MonoBehaviour
     IEnumerator Pickup()
     {
         Debug.Log("Pickup");
-        //yield return new WaitForSeconds(1.5f);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(1.5f);
+        //yield return new WaitForSeconds(0.1f);
         boxs.transform.parent = handPlayer.transform;
         //boxs.transform.rotation = Quaternion.Euler(0, 0, 0);
         boxs.transform.position = handPlayer.transform.position;

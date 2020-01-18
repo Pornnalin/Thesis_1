@@ -1231,7 +1231,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!136 &1318101122
 CapsuleCollider:
@@ -1263,6 +1263,7 @@ MonoBehaviour:
   someBoxs: {fileID: 1060175410}
   current: {fileID: 1318501237}
   cameraControl: {fileID: 2143079666}
+  isControlPlayer: 0
 --- !u!1 &1318135425
 GameObject:
   m_ObjectHideFlags: 0
