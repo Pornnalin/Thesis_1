@@ -6,7 +6,8 @@ public class MainPlayerController : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpForce;
-    public float gravityScale;
+    //public float gravityScale;
+    private float Gravity = 20.0f;
     public bool isSlide = false;
     public Animator anim;
     float horizontaMove = 0f;
@@ -24,66 +25,70 @@ public class MainPlayerController : MonoBehaviour
     void Start()
     {
 
-
+        charController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.IsInputEnabled)
+        {
+           float yStore = moveDirection.y;
+            //float hMove = Input.GetAxis("Horizontal");
+            //float VMove = Input.GetAxis("Vertical");
 
-        charController = GetComponent<CharacterController>();
-
-        //Vector3 scaleP = scalePlayer.transform.localScale;
-
-        float yStore = moveDirection.y;
-        //float hMove = Input.GetAxis("Horizontal");
-        //float VMove = Input.GetAxis("Vertical");
-
-        moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
-        moveDirection.Normalize();
-        moveDirection = moveDirection * moveSpeed;
-        moveDirection.y = yStore;
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+            moveDirection.Normalize();
+            moveDirection = moveDirection * moveSpeed;
+            moveDirection.y = yStore;
 
 
-        //jump
-        JumpInput();
-        CheckGround();
-
-        //rotation
-        RotationChar();
-
-
-        moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
-        //Debug.Log("gravity" + Physics.gravity.y);
-
-        charController.Move(moveDirection * Time.deltaTime);
-
-       
-
-        anim.SetBool("isGrounded", charController.isGrounded);
-        anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))));
+            //jump
+            if (charController.isGrounded)
+            {
+                JumpInput();
+            
+            }
+            //rotation
+            RotationChar();
 
 
+            //moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
+            moveDirection.y -= Gravity * Time.deltaTime;
+            //Debug.Log("gravity" + Physics.gravity.y);
+
+            charController.Move(moveDirection * Time.deltaTime);
+
+
+
+            anim.SetBool("isGrounded", charController.isGrounded);
+            anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))));
+
+
+        }
     }
     private void JumpInput()
     {
-        if (charController.isGrounded)
+
+        moveDirection.y = 0f;
+
+
+        if (Input.GetKeyDown(KeyCode.Space) && !Isjump)
         {
-            moveDirection.y = 0f;
-
-
-            if (Input.GetKeyDown(KeyCode.Space) && !Isjump)
-            {
-                moveDirection.y = jumpForce;
-                Isjump = true;
-                Debug.Log("Jump");
-            }
-            else
-            {
-                Isjump = false;
-            }
-
+            moveDirection.y = jumpForce;
+            
+            anim.SetBool("is_in_air", true);
+            Isjump = true;
+            Debug.Log("Jump");
         }
+        else
+        {
+           
+            anim.SetBool("is_in_air", false);
+            Isjump = false;
+        }
+
+
     }
     private void RotationChar()
     {
@@ -130,7 +135,7 @@ public class MainPlayerController : MonoBehaviour
 
     }
 
-
+  
 }
     
 

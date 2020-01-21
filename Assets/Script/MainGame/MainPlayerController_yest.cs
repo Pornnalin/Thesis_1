@@ -6,7 +6,7 @@ public class MainPlayerController_yest : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpForce;
-    public float gravityScale;
+    private float Gravity = 20.0f;
     public Animator anim;
 
     private CharacterController charController;
@@ -23,45 +23,53 @@ public class MainPlayerController_yest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
-
-        //Vector3 scaleP = scalePlayer.transform.localScale;
-
-
-        //float hMove = Input.GetAxis("Horizontal");
-        //float VMove = Input.GetAxis("Vertical");
-        float yStore = moveDirection.y;
-        //moveDirection = new Vector3(Input.GetAxis("Horizontal"), moveDirection.y, 0);
-        moveDirection = (transform.right * Input.GetAxis("Horizontal"));
-        moveDirection = moveDirection.normalized * moveSpeed;
-        moveDirection.y = yStore;
-
-        //jump
-        JumpInput();
-        if (charController.isGrounded)
+        if (GameManager.IsInputEnabled == true)
         {
-            moveDirection.y = 0f;
-            if (Input.GetButtonDown("Jump"))
+            //Vector3 scaleP = scalePlayer.transform.localScale;
+
+            float hMove = Input.GetAxis("Horizontal");
+            //float VMove = Input.GetAxis("Vertical");
+            float yStore = moveDirection.y;
+            //moveDirection = new Vector3(Input.GetAxis("Horizontal"), moveDirection.y, 0);
+            moveDirection = (transform.right * Input.GetAxis("Horizontal"));
+            moveDirection = moveDirection.normalized * moveSpeed;
+            moveDirection.y = yStore;
+
+            //jump
+            JumpInput();
+            if (charController.isGrounded)
             {
-                moveDirection.y = jumpForce;
+
+                moveDirection.y = 0f;
+                if (Input.GetButton("Jump"))
+                {
+                    GameManager.IsInputEnabled = false;
+                    moveDirection.y = jumpForce;
+                    Isjump = true;
+                    anim.SetBool("is_in_air", true);
+                }
+                else
+                {
+                    Isjump = false;
+                    anim.SetBool("is_in_air", false);
+
+                }
             }
+
+            //rotation
+
+            moveDirection.y -= Gravity * Time.deltaTime;
+
+            //moveDirection.y = moveDirection.y + (Physics.gravity.y * Gravity * Time.deltaTime);
+            //Debug.Log("gravity" + Physics.gravity.y);
+
+            charController.Move(moveDirection * Time.deltaTime);
+
+            anim.SetBool("isGrounded", charController.isGrounded);
+            anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))));
+
+
         }
-
-        //rotation
-
-
-
-        moveDirection.y = moveDirection.y + (Physics.gravity.y * gravityScale * Time.deltaTime);
-        //Debug.Log("gravity" + Physics.gravity.y);
-
-        charController.Move(moveDirection * Time.deltaTime);
-
-        anim.SetBool("isGrounded", charController.isGrounded);
-        anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))));
-
-
-
     }
     private void JumpInput()
     {
