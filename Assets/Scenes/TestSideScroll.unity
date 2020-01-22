@@ -295,7 +295,7 @@ Transform:
   m_GameObject: {fileID: 277851915}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.589, z: 0.57}
-  m_LocalScale: {x: 23.153461, y: 1.3539203, z: 22.201569}
+  m_LocalScale: {x: 84.51708, y: 1.3539203, z: 22.201569}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -373,6 +373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 15
+  gravityScale: 3
   isSlide: 0
   anim: {fileID: 1778873593}
   scalePlayer: {fileID: 465760195}
@@ -380,6 +381,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   rayMark: {fileID: 1071119194}
+  distanceGround: 0
 --- !u!136 &733251459
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -437,15 +439,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400138, guid: b50c0fcc42378cf4eaef80b3b52f5758, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.02278005
+      value: -0.016
       objectReference: {fileID: 0}
     - target: {fileID: 400138, guid: b50c0fcc42378cf4eaef80b3b52f5758, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.054000024
+      value: 0.013
       objectReference: {fileID: 0}
     - target: {fileID: 400138, guid: b50c0fcc42378cf4eaef80b3b52f5758, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00032601634
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400138, guid: b50c0fcc42378cf4eaef80b3b52f5758, type: 3}
       propertyPath: m_LocalRotation.x
@@ -486,7 +488,7 @@ PrefabInstance:
     - target: {fileID: 9500000, guid: b50c0fcc42378cf4eaef80b3b52f5758, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: a2acf6573eecd8d4891c00bbb75bd7e0, type: 2}
+      objectReference: {fileID: 9100000, guid: bf8df4a21ace65e4f8cfc56de596f662, type: 2}
     - target: {fileID: 9500000, guid: b50c0fcc42378cf4eaef80b3b52f5758, type: 3}
       propertyPath: m_WarningMessage
       value: 
@@ -510,7 +512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!154 &1237763622
 TerrainCollider:
   m_ObjectHideFlags: 0

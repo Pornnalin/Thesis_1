@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Box
   - CheackNewMap
+  - Ground
   layers:
   - Default
   - TransparentFX
