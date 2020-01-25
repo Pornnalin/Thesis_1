@@ -24,9 +24,11 @@ public class MainCameraFollow : MonoBehaviour
 
     private void Update()
     {
+
         Vector3 targetCampos = target.position + offset;
 
         transform.position = Vector3.Lerp(transform.position, targetCampos, smoothing * Time.deltaTime);
+        transform.LookAt(target);
     }
 
 }

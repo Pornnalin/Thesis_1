@@ -13,8 +13,11 @@ public class MainPlayerController : MonoBehaviour
     public Animator anim;
     float horizontaMove = 0f;
     public Transform scalePlayer;
+    [Header("Climb")]
+    public bool isClimb = false;
+
     [Header("CheckDistGround")]
-    public LayerMask mask;
+     public LayerMask mask;
     public GameObject rayMark;
     //public Transform distanceGround;
     public float distanceGround;
@@ -23,6 +26,7 @@ public class MainPlayerController : MonoBehaviour
 
     private CharacterController charController;
     private Vector3 moveDirection;
+    private Vector3 moveDirection_C;
     private bool Isjump = false;
 
     // Start is called before the first frame update
@@ -53,16 +57,35 @@ public class MainPlayerController : MonoBehaviour
             if (charController.isGrounded)
             {
                 JumpInput();
+                //if (isClimb)
+                //{
+                //    StartClimb();
+                //}
 
             }
             else
             {
               
             }
+
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                if (isClimb)
+                {
+                    StartClimb();
+                    anim.SetBool("IsClimb", true);
+                }
+            }
+            
+            //if (Input.GetKeyDown(KeyCode.W))
+            //{
+            //    Debug.Log("up");
+                
+            //}
+           
             //rotation
             RotationChar();
-
-
+           
             moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
             //moveDirection.y -= Gravity * Time.deltaTime;
             //Debug.Log("gravity" + Physics.gravity.y);
@@ -73,7 +96,7 @@ public class MainPlayerController : MonoBehaviour
 
             anim.SetBool("isGrounded", charController.isGrounded);
             anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))));
-
+         
             //CheckGround();
 
         }
@@ -82,13 +105,16 @@ public class MainPlayerController : MonoBehaviour
     {
         if (!Physics.Raycast(transform.position, -Vector3.up, distanceGround + 0.1f))
         {
+            Debug.DrawLine(rayMark.transform.position, -Vector3.up, Color.red);
             Debug.Log("we are in air");
-            Debug.Log(distanceGround);
+            anim.SetBool("Jump", true);
+            Debug.Log(distanceGround+"while fall");
             //anim.SetBool("Lading", true);
-            
+
         }
         else
         {
+            Debug.Log(distanceGround + "end");
             Debug.Log("Ground");
             //anim.SetBool("Lading", false);
         }
@@ -102,14 +128,14 @@ public class MainPlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !Isjump)
         {
             moveDirection.y = jumpForce;
-
+            moveSpeed = 3;
             anim.SetBool("Jump", true);
             Isjump = true;
             Debug.Log("Jump");
         }
         else
         {
-
+            moveSpeed = 5;
             anim.SetBool("Jump", false);
             Isjump = false;
         }
@@ -160,6 +186,39 @@ public class MainPlayerController : MonoBehaviour
         //}
 
 
+    }
+
+    public void StartClimb()
+    {
+        gravityScale = -1 * Time.deltaTime;
+        float VMove = Input.GetAxis("Vertical");
+             
+        Debug.Log("Climb");
+        moveDirection_C = new Vector3(Input.GetAxis("Vertical"), 0, 0);
+
+        //charController.Move(moveDirection_C * Time.deltaTime);
+        anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Vertical"))));
+
+        //anim.SetBool("IsClimb", true);
+
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Ladder") 
+        {
+            Debug.Log("ClimbAnimation");
+            isClimb = true;
+            //moveDirection = new Vector3(0, Input.GetAxis("Vertical"), 0);
+            //anim.SetBool("IsClimb", true);
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        isClimb = false;
+        anim.SetBool("IsClimb", false);
+        gravityScale = 3;
     }
 
 
