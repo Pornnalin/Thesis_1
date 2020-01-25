@@ -35,6 +35,7 @@ public class MainPlayerController : MonoBehaviour
         Debug.Log(distanceGround + "start");
         charController = GetComponent<CharacterController>();
         distanceGround = GetComponent<Collider>().bounds.extents.y;
+        anim.SetBool("Jump", false);
 
     }
 
@@ -103,21 +104,23 @@ public class MainPlayerController : MonoBehaviour
     }
     public void FixedUpdate()
     {
-        if (!Physics.Raycast(transform.position, -Vector3.up, distanceGround + 0.1f))
+        if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f)) 
         {
-            Debug.DrawLine(rayMark.transform.position, -Vector3.up, Color.red);
+            Debug.DrawLine(rayMark.transform.position, Vector3.down, Color.red);
             Debug.Log("we are in air");
             anim.SetBool("Jump", true);
-            Debug.Log(distanceGround+"while fall");
-            //anim.SetBool("Lading", true);
+            Debug.Log(distanceGround + "while fall");
+            anim.SetBool("Lading", true);
 
         }
         else
         {
             Debug.Log(distanceGround + "end");
             Debug.Log("Ground");
-            //anim.SetBool("Lading", false);
+            anim.SetBool("Lading", false);
+            anim.SetBool("Jump", false);
         }
+
     }
     private void JumpInput()
     {
@@ -190,14 +193,14 @@ public class MainPlayerController : MonoBehaviour
 
     public void StartClimb()
     {
-        gravityScale = -1 * Time.deltaTime;
-        float VMove = Input.GetAxis("Vertical");
+        //gravityScale = -1 * Time.deltaTime;
+        //float VMove = Input.GetAxis("Vertical");
              
         Debug.Log("Climb");
-        moveDirection_C = new Vector3(Input.GetAxis("Vertical"), 0, 0);
+        //moveDirection_C = new Vector3(Input.GetAxis("Vertical"), 0, 0);
 
         //charController.Move(moveDirection_C * Time.deltaTime);
-        anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Vertical"))));
+        //anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Vertical"))));
 
         //anim.SetBool("IsClimb", true);
 

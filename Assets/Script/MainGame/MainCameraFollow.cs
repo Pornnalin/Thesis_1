@@ -7,7 +7,7 @@ public class MainCameraFollow : MonoBehaviour
     public Transform target;
     public float smoothing = 10f;
 
-    Vector3 offset;
+     public Vector3 offset;
     // Start is called before the first frame update
     void Start()
     {
