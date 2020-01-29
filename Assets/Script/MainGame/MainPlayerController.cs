@@ -8,6 +8,7 @@ public class MainPlayerController : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
     public float gravityScale;
+    public GameObject playerModel;
     //private float Gravity = 20.0f;
     public bool isSlide = false;
     public Animator anim;
@@ -15,9 +16,11 @@ public class MainPlayerController : MonoBehaviour
     public Transform scalePlayer;
     [Header("Climb")]
     public bool isClimb = false;
+    [Header("Push")]
+    public GameObject checkBox;
 
     [Header("CheckDistGround")]
-     public LayerMask mask;
+    public LayerMask mask;
     public GameObject rayMark;
     //public Transform distanceGround;
     public float distanceGround;
@@ -48,7 +51,7 @@ public class MainPlayerController : MonoBehaviour
             //float hMove = Input.GetAxis("Horizontal");
             //float VMove = Input.GetAxis("Vertical");
 
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, 0/* Input.GetAxis("Vertical")*/);
             moveDirection.Normalize();
             moveDirection = moveDirection * moveSpeed;
             moveDirection.y = yStore;
@@ -66,7 +69,7 @@ public class MainPlayerController : MonoBehaviour
             }
             else
             {
-              
+
             }
 
             if (Input.GetKeyDown(KeyCode.W))
@@ -77,34 +80,40 @@ public class MainPlayerController : MonoBehaviour
                     anim.SetBool("IsClimb", true);
                 }
             }
-            
+
             //if (Input.GetKeyDown(KeyCode.W))
             //{
             //    Debug.Log("up");
-                
+
             //}
-           
+
             //rotation
-            RotationChar();
-           
+            //RotationChar();
+            transform.right = Vector3.Slerp(transform.right, Vector3.right * Input.GetAxis("Horizontal"), 0.1f);
+
             moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
             //moveDirection.y -= Gravity * Time.deltaTime;
             //Debug.Log("gravity" + Physics.gravity.y);
 
             charController.Move(moveDirection * Time.deltaTime);
 
-
+            //if(Input.GetAxis("Horizontal")!=0|| Input.GetAxis("Vertical") != 0)
+            //{
+            //    Quaternion newRotation = Quaternion.LookRotation(new Vector3(moveDirection.x, moveDirection.z));
+            //    playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation, newRotation, 3 * Time.deltaTime);
+            //}
 
             anim.SetBool("isGrounded", charController.isGrounded);
-            anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))));
-         
+            anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal")))/*+ Mathf.Abs(Input.GetAxis("Vertical"))*/);
+
             //CheckGround();
+            CheckBox();
 
         }
     }
     public void FixedUpdate()
     {
-        if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f)) 
+        if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f))
         {
             Debug.DrawLine(rayMark.transform.position, Vector3.down, Color.red);
             Debug.Log("we are in air");
@@ -145,6 +154,8 @@ public class MainPlayerController : MonoBehaviour
 
 
     }
+
+    bool isTrunRight;
     private void RotationChar()
     {
         Vector3 scaleP = scalePlayer.transform.localScale;
@@ -152,10 +163,12 @@ public class MainPlayerController : MonoBehaviour
 
         if (hMove < 0)
         {
+            isTrunRight = false;
             scaleP.z = -1;
         }
         if (hMove > 0)
         {
+            isTrunRight = true;
             scaleP.z = 1;
         }
         scalePlayer.transform.localScale = scaleP;
@@ -195,7 +208,7 @@ public class MainPlayerController : MonoBehaviour
     {
         //gravityScale = -1 * Time.deltaTime;
         //float VMove = Input.GetAxis("Vertical");
-             
+
         Debug.Log("Climb");
         //moveDirection_C = new Vector3(Input.GetAxis("Vertical"), 0, 0);
 
@@ -208,7 +221,7 @@ public class MainPlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Ladder") 
+        if (other.gameObject.tag == "Ladder")
         {
             Debug.Log("ClimbAnimation");
             isClimb = true;
@@ -224,7 +237,26 @@ public class MainPlayerController : MonoBehaviour
         gravityScale = 3;
     }
 
+   public void CheckBox()
+    {
 
+        Ray ray = new Ray(checkBox.transform.position, transform.right);
+        RaycastHit hitInfo;
+        Debug.Log(ray);
+        if (Physics.Raycast(ray, out hitInfo, 30, mask, QueryTriggerInteraction.Ignore))
+        {
+            Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
+            print(hitInfo.collider.gameObject.tag);
+
+            //if (hitInfo.collider.tag == "ground")
+            //{
+            //    Debug.Log(isSlide + "1");
+            //    isSlide = true;
+
+            //}
+
+        }
+    }
 }
 
     
