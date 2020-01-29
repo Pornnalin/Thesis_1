@@ -6,6 +6,7 @@ public class PushTest : MonoBehaviour
 {
     Rigidbody rigidbody;
     public float speed;
+    Vector3 dir;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,10 +22,13 @@ public class PushTest : MonoBehaviour
             if (Input.GetKey(KeyCode.E) && GameManager.IsInputEnabled) 
             {
 
-                MainPlayerController.instance.anim.SetBool("IsPush", true);
-                MainPlayerController.instance.charController.height = 1.7f;
-                rigidbody.velocity = Vector3.right * Time.deltaTime * speed;
-                rigidbody.isKinematic = false;
+                //MainPlayerController.instance.anim.SetBool("IsPush", true);
+                //MainPlayerController.instance.charController.height = 1.7f;
+                //rigidbody.velocity = Vector3.right * Time.deltaTime * speed;
+                //transform.Translate(Vector3.right * Time.deltaTime);
+                checkRotaion();
+
+
 
             }
             else
@@ -32,10 +36,13 @@ public class PushTest : MonoBehaviour
                 isPush = false;
                 MainPlayerController.instance.anim.SetBool("IsPush", false);
                 MainPlayerController.instance.charController.height = 1.86f;
-                rigidbody.isKinematic = true;
+                
             }
            
         }
+
+        
+
 
         //if (Input.GetKey(KeyCode.E))
         //{
@@ -49,6 +56,10 @@ public class PushTest : MonoBehaviour
         //{
         //    Debug.Log("GetButtonDownA");
         //}
+    }
+    public void FixedUpdate()
+    {
+        
     }
     bool isPush;
     private void OnTriggerStay(Collider other)
@@ -67,5 +78,26 @@ public class PushTest : MonoBehaviour
         MainPlayerController.instance.anim.SetBool("IsPush", false);
         MainPlayerController.instance.charController.height = 1.86f;
 
+    }
+
+    public void checkRotaion()
+    {
+        if (MainPlayerController.instance.playerModel.transform.rotation.eulerAngles.y == 0)
+        {
+            MainPlayerController.instance.anim.SetBool("IsPush", true);
+            MainPlayerController.instance.charController.height = 1.7f;
+            //rigidbody.velocity = Vector3.right * Time.deltaTime * speed;
+            transform.Translate(Vector3.right * Time.deltaTime);
+
+            Debug.Log("0");
+        }
+        if (MainPlayerController.instance.playerModel.transform.rotation.eulerAngles.y == 180)
+        {
+            MainPlayerController.instance.anim.SetBool("IsPush", true);
+            MainPlayerController.instance.charController.height = 1.7f;
+            //rigidbody.velocity = Vector3.right * Time.deltaTime * speed;
+            transform.Translate(Vector3.left * Time.deltaTime);
+            Debug.Log("180");
+        }
     }
 }
