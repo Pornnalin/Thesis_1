@@ -6,7 +6,7 @@ public class MainCameraFollow : MonoBehaviour
 {
     public Transform target;
     public float smoothing = 10f;
-
+    public GameObject player;
      public Vector3 offset;
     // Start is called before the first frame update
     void Start()
@@ -28,7 +28,10 @@ public class MainCameraFollow : MonoBehaviour
         Vector3 targetCampos = target.position + offset;
 
         transform.position = Vector3.Lerp(transform.position, targetCampos, smoothing * Time.deltaTime);
-        transform.LookAt(target);
+        //transform.LookAt(target);
+
+
+
     }
 
 }

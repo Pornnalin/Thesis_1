@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MainPlayerController : MonoBehaviour
 {
+    public static MainPlayerController instance;
     [Header("PlayerMovement")]
     public float moveSpeed;
     public float jumpForce;
@@ -27,7 +28,7 @@ public class MainPlayerController : MonoBehaviour
 
 
 
-    private CharacterController charController;
+    public CharacterController charController;
     private Vector3 moveDirection;
     private Vector3 moveDirection_C;
     private bool Isjump = false;
@@ -40,6 +41,17 @@ public class MainPlayerController : MonoBehaviour
         distanceGround = GetComponent<Collider>().bounds.extents.y;
         anim.SetBool("Jump", false);
 
+    }
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
     }
 
     // Update is called once per frame
@@ -81,11 +93,7 @@ public class MainPlayerController : MonoBehaviour
                 }
             }
 
-            //if (Input.GetKeyDown(KeyCode.W))
-            //{
-            //    Debug.Log("up");
-
-            //}
+           
 
             //rotation
             //RotationChar();
@@ -174,35 +182,7 @@ public class MainPlayerController : MonoBehaviour
         scalePlayer.transform.localScale = scaleP;
     }
 
-    private void CheckGround()
-    {
-
-        //Ray ray = new Ray(rayMark.transform.position, -transform.up);
-        //RaycastHit hitInfo;
-        //Debug.Log(ray);
-        //if (Physics.Raycast(ray, out hitInfo, 30, mask, QueryTriggerInteraction.Ignore))
-        //{
-        //    Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
-        //    print(hitInfo.collider.gameObject.tag);
-
-        //    if (hitInfo.collider.tag == "ground")
-        //    {
-        //        Debug.Log(isSlide + "1");
-        //        isSlide = true;
-
-        //    }
-
-
-        //}
-        //else
-        //{
-
-        //    Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100, Color.green);
-        //    Debug.Log(isSlide + "2");
-        //}
-
-
-    }
+    
 
     public void StartClimb()
     {
@@ -237,25 +217,29 @@ public class MainPlayerController : MonoBehaviour
         gravityScale = 3;
     }
 
+   
    public void CheckBox()
     {
 
-        Ray ray = new Ray(checkBox.transform.position, transform.right);
-        RaycastHit hitInfo;
-        Debug.Log(ray);
-        if (Physics.Raycast(ray, out hitInfo, 30, mask, QueryTriggerInteraction.Ignore))
-        {
-            Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
-            print(hitInfo.collider.gameObject.tag);
+        //Ray ray = new Ray(checkBox.transform.position, transform.right);
+        //RaycastHit hitInfo;
+        ////Debug.Log(ray);
+        //if (Physics.Raycast(ray, out hitInfo, 1, mask, QueryTriggerInteraction.Ignore))
+        //{
+        //    Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
+        //    print(hitInfo.collider.gameObject.tag);
 
-            //if (hitInfo.collider.tag == "ground")
-            //{
-            //    Debug.Log(isSlide + "1");
-            //    isSlide = true;
+        //    if (hitInfo.collider.CompareTag("Ob_Box"))
+        //    {
+        //        isFoundBox = true;
+        //        Debug.Log("foundbox");
+        //    }
+        //    else
+        //    {
+        //        isFoundBox = false;
+        //    }
 
-            //}
-
-        }
+        //}
     }
 }
 

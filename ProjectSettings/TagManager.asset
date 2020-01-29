@@ -8,6 +8,7 @@ TagManager:
   - CheackNewMap
   - Ground
   - Ladder
+  - Ob_Box
   layers:
   - Default
   - TransparentFX
