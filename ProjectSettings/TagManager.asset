@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Ladder
   - Ob_Box
+  - Hang to crouch
   layers:
   - Default
   - TransparentFX

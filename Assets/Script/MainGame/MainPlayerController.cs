@@ -22,7 +22,7 @@ public class MainPlayerController : MonoBehaviour
     //Rigidbody rigidbody;
     public float speedCilmb;
     public Transform labber;
-    public Animation animation;
+   
 
 
     [Header("CheckDistGround")]
@@ -151,9 +151,12 @@ public class MainPlayerController : MonoBehaviour
                 transform.Translate(Vector3.up * Input.GetAxis("Vertical") * speedCilmb * Time.deltaTime);
                 Debug.Log("up");
                 anim.SetBool("IsClimb", true);
+
+
+
             }
-           
-           else if (Input.GetKey(KeyCode.S))
+
+            else if (Input.GetKey(KeyCode.S))
             {
                 anim.SetBool("IsHang", false);
                 charController.height = 1.2f;
@@ -162,6 +165,7 @@ public class MainPlayerController : MonoBehaviour
                 anim.SetBool("IsClimb", true);
                 Debug.Log("down");
             }
+          
 
             else
             {
@@ -229,6 +233,13 @@ public class MainPlayerController : MonoBehaviour
         {
             labber.transform.position = other.transform.position;
         }
+
+        //if(other.gameObject.tag== "Hang to crouch")
+        //{
+        //    GameManager.IsInputEnabled = false;
+        //    anim.SetBool("Hang to crouch",true);
+        //}
+      
     }
 
     public void OnTriggerStay(Collider other)
@@ -249,7 +260,9 @@ public class MainPlayerController : MonoBehaviour
         isClimb = false;
         anim.SetBool("IsClimb", false);
         gravityScale = 3;
-
+        anim.SetBool("IsHang", false);
+        //GameManager.IsInputEnabled = true;
+        //anim.SetBool("Hang to crouch", false);
     }
 
 

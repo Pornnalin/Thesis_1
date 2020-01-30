@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PushItem : MonoBehaviour
 {
-    Rigidbody rigidbody;
+    Rigidbody _rigidbody;
     public float speed;
     Vector3 dir;
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
