@@ -15,11 +15,14 @@ public class MainPlayerController : MonoBehaviour
     public Animator anim;
     float horizontaMove = 0f;
     public Transform scalePlayer;
+
     [Header("Climb")]
     public bool isClimb = false;
     public Vector3 current;
-    Rigidbody rigidbody;
+    //Rigidbody rigidbody;
     public float speedCilmb;
+    public Transform labber;
+    public Animation animation;
 
 
     [Header("CheckDistGround")]
@@ -43,7 +46,7 @@ public class MainPlayerController : MonoBehaviour
         distanceGround = GetComponent<Collider>().bounds.extents.y;
         anim.SetBool("Jump", false);
         current = transform.position;
-        rigidbody = GetComponent<Rigidbody>();
+        //rigidbody = GetComponent<Rigidbody>();
 
     }
     private void Awake()
@@ -98,16 +101,11 @@ public class MainPlayerController : MonoBehaviour
             transform.right = Vector3.Slerp(transform.right, Vector3.right * Input.GetAxis("Horizontal"), 0.1f);
 
             moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
-            //moveDirection.y -= Gravity * Time.deltaTime;
-            //Debug.Log("gravity" + Physics.gravity.y);
+           
 
             charController.Move(moveDirection * Time.deltaTime);
 
-            //if(Input.GetAxis("Horizontal")!=0|| Input.GetAxis("Vertical") != 0)
-            //{
-            //    Quaternion newRotation = Quaternion.LookRotation(new Vector3(moveDirection.x, moveDirection.z));
-            //    playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation, newRotation, 3 * Time.deltaTime);
-            //}
+           
 
             anim.SetBool("isGrounded", charController.isGrounded);
             anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal")))/*+ Mathf.Abs(Input.GetAxis("Vertical"))*/);
@@ -142,6 +140,7 @@ public class MainPlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.W))
             {
+                anim.SetBool("IsHang", false);
                 //rigidbody.constraints = RigidbodyConstraints.None;
                 charController.height = 1.2f;
                 //transform.Translate(Vector3.up * Time.deltaTime * 100f);
@@ -153,22 +152,26 @@ public class MainPlayerController : MonoBehaviour
                 Debug.Log("up");
                 anim.SetBool("IsClimb", true);
             }
+           
+           else if (Input.GetKey(KeyCode.S))
+            {
+                anim.SetBool("IsHang", false);
+                charController.height = 1.2f;
+                //gravityScale = 1;
+                transform.Translate(Vector3.up * Input.GetAxis("Vertical") * speedCilmb * Time.deltaTime);
+                anim.SetBool("IsClimb", true);
+                Debug.Log("down");
+            }
+
             else
             {
 
                 anim.SetBool("IsClimb", false);
                 charController.height = 1.86f;
+                anim.SetBool("IsHang", true);
+
 
             }
-            //if (Input.GetKey(KeyCode.S))
-            //{
-            //    charController.height = 1.2f;
-            //    moveDirection.y -= speedCilmb * Time.deltaTime;
-            //    gravityScale = 1;
-            //    //playerModel.transform.Translate(new Vector3(0, -1, 0) * Time.deltaTime * 5f);
-
-            //    Debug.Log("down");
-            //}
         }
         else
         {
@@ -220,7 +223,13 @@ public class MainPlayerController : MonoBehaviour
         scalePlayer.transform.localScale = scaleP;
     }
 
-
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Ladder")
+        {
+            labber.transform.position = other.transform.position;
+        }
+    }
 
     public void OnTriggerStay(Collider other)
     {
