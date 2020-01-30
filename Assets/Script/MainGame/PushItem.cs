@@ -2,79 +2,100 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(AudioSource))]
-
 public class PushItem : MonoBehaviour
 {
-    public AudioClip soundClip;
-    public float obMass = 300;
-    public float pushAtMass = 100;
-    public float pushingTime;
-    public float foreceToPush;
-    Rigidbody rigi;
-    public float vel;
-    AudioSource audioPlyer;
+    Rigidbody rigidbody;
+    public float speed;
     Vector3 dir;
-
-    Vector3 lastPos;
-    float _pushingTime = 0;
-
     // Start is called before the first frame update
     void Start()
     {
-        rigi = GetComponent<Rigidbody>();
-        if (rigi == null) return;
-
-        //audioPlyer = GetComponent<AudioSource>();
-        //if (soundClip != null)
-        //{
-        //    audioPlyer.clip = soundClip;
-        //    audioPlyer.Stop();
-        //}
-        //audioPlyer.volume = 0;
-        //audioPlyer.pitch = 0.5f;
-        rigi.mass = obMass;
-
-    }
-
-    bool IsMoveing()
-    {
-        if (rigi.velocity.magnitude > 0.06f)
-        {
-            return true;
-        }
-        return false;
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        vel = rigi.velocity.magnitude;
-        if (Input.GetKeyUp(KeyCode.F))
+        if (isPush)
         {
-            rigi.isKinematic = true;
-            //if (soundClip != null)
-            //{
-            //    audioPlyer.Stop();
-            //}
 
-            //audioPlyer.volume = 0f;
-            //audioPlyer.pitch = 0.2f;
+            if (Input.GetKey(KeyCode.E) && GameManager.IsInputEnabled) 
+            {
+
+                //MainPlayerController.instance.anim.SetBool("IsPush", true);
+                //MainPlayerController.instance.charController.height = 1.7f;
+                //rigidbody.velocity = Vector3.right * Time.deltaTime * speed;
+                //transform.Translate(Vector3.right * Time.deltaTime);
+                checkRotaion();
+
+
+
+            }
+            else
+            {
+                isPush = false;
+                MainPlayerController.instance.anim.SetBool("IsPush", false);
+                MainPlayerController.instance.charController.height = 1.86f;
+                
+            }
+           
         }
 
-        if (rigi.isKinematic == false)
-        {
-            _pushingTime += Time.deltaTime;
-            if (_pushingTime >= pushingTime)
-            {
-                _pushingTime = pushingTime;
-            }
-
-            rigi.mass = Mathf.Lerp(obMass, pushingTime, _pushingTime / pushingTime);
-            rigi.AddForce(dir * foreceToPush, ForceMode.Force);
         
+
+
+        //if (Input.GetKey(KeyCode.E))
+        //{
+        //    Debug.Log("E");
+        //}
+        //if (Input.GetKeyUp(KeyCode.F))
+        //{
+        //    Debug.Log("UpF");
+        //}
+        //if (Input.GetButton("Fire1"))
+        //{
+        //    Debug.Log("GetButtonDownA");
+        //}
+    }
+
+    bool isPush;
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Isplayer");
+            isPush = true;
+            
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        isPush = false;
+        MainPlayerController.instance.anim.SetBool("IsPush", false);
+        MainPlayerController.instance.charController.height = 1.86f;
+
+    }
+
+    public void checkRotaion()
+    {
+        if (MainPlayerController.instance.playerModel.transform.rotation.eulerAngles.y == 0)
+        {
+            MainPlayerController.instance.anim.SetBool("IsPush", true);
+            MainPlayerController.instance.charController.height = 1.7f;
+            //rigidbody.velocity = Vector3.right * Time.deltaTime * speed;
+            transform.Translate(Vector3.right * Time.deltaTime);
+
+            Debug.Log("0");
+        }
+        if (MainPlayerController.instance.playerModel.transform.rotation.eulerAngles.y == 180)
+        {
+            MainPlayerController.instance.anim.SetBool("IsPush", true);
+            MainPlayerController.instance.charController.height = 1.7f;
+            //rigidbody.velocity = Vector3.right * Time.deltaTime * speed;
+            transform.Translate(Vector3.left * Time.deltaTime);
+
+            Debug.Log("180");
         }
     }
 }

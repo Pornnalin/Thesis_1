@@ -17,8 +17,10 @@ public class MainPlayerController : MonoBehaviour
     public Transform scalePlayer;
     [Header("Climb")]
     public bool isClimb = false;
-    [Header("Push")]
-    public GameObject checkBox;
+    public Vector3 current;
+    Rigidbody rigidbody;
+    public float speedCilmb;
+
 
     [Header("CheckDistGround")]
     public LayerMask mask;
@@ -40,6 +42,8 @@ public class MainPlayerController : MonoBehaviour
         charController = GetComponent<CharacterController>();
         distanceGround = GetComponent<Collider>().bounds.extents.y;
         anim.SetBool("Jump", false);
+        current = transform.position;
+        rigidbody = GetComponent<Rigidbody>();
 
     }
     private void Awake()
@@ -83,17 +87,11 @@ public class MainPlayerController : MonoBehaviour
             {
 
             }
+            //climb
 
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                if (isClimb)
-                {
-                    StartClimb();
-                    anim.SetBool("IsClimb", true);
-                }
-            }
 
-           
+
+
 
             //rotation
             //RotationChar();
@@ -117,6 +115,7 @@ public class MainPlayerController : MonoBehaviour
             //CheckGround();
             CheckBox();
 
+
         }
     }
     public void FixedUpdate()
@@ -136,6 +135,45 @@ public class MainPlayerController : MonoBehaviour
             Debug.Log("Ground");
             anim.SetBool("Lading", false);
             anim.SetBool("Jump", false);
+        }
+
+        if (isClimb)
+        {
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                //rigidbody.constraints = RigidbodyConstraints.None;
+                charController.height = 1.2f;
+                //transform.Translate(Vector3.up * Time.deltaTime * 100f);
+                //moveDirection.y += speedCilmb * Time.deltaTime;
+                //moveDirection.Normalize();
+                //moveDirection.y = current.y;
+                gravityScale = 0;
+                transform.Translate(Vector3.up * Input.GetAxis("Vertical") * speedCilmb * Time.deltaTime);
+                Debug.Log("up");
+                anim.SetBool("IsClimb", true);
+            }
+            else
+            {
+
+                anim.SetBool("IsClimb", false);
+                charController.height = 1.86f;
+
+            }
+            //if (Input.GetKey(KeyCode.S))
+            //{
+            //    charController.height = 1.2f;
+            //    moveDirection.y -= speedCilmb * Time.deltaTime;
+            //    gravityScale = 1;
+            //    //playerModel.transform.Translate(new Vector3(0, -1, 0) * Time.deltaTime * 5f);
+
+            //    Debug.Log("down");
+            //}
+        }
+        else
+        {
+            anim.SetBool("IsClimb", false);
+            charController.height = 1.86f;
         }
 
     }
@@ -182,32 +220,19 @@ public class MainPlayerController : MonoBehaviour
         scalePlayer.transform.localScale = scaleP;
     }
 
-    
 
-    public void StartClimb()
-    {
-        //gravityScale = -1 * Time.deltaTime;
-        //float VMove = Input.GetAxis("Vertical");
 
-        Debug.Log("Climb");
-        //moveDirection_C = new Vector3(Input.GetAxis("Vertical"), 0, 0);
-
-        //charController.Move(moveDirection_C * Time.deltaTime);
-        //anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Vertical"))));
-
-        //anim.SetBool("IsClimb", true);
-
-    }
-
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Ladder")
         {
             Debug.Log("ClimbAnimation");
             isClimb = true;
+
             //moveDirection = new Vector3(0, Input.GetAxis("Vertical"), 0);
             //anim.SetBool("IsClimb", true);
         }
+
     }
 
     public void OnTriggerExit(Collider other)
@@ -215,10 +240,11 @@ public class MainPlayerController : MonoBehaviour
         isClimb = false;
         anim.SetBool("IsClimb", false);
         gravityScale = 3;
+
     }
 
-   
-   public void CheckBox()
+
+    public void CheckBox()
     {
 
         //Ray ray = new Ray(checkBox.transform.position, transform.right);
@@ -242,6 +268,7 @@ public class MainPlayerController : MonoBehaviour
         //}
     }
 }
+
 
     
 
