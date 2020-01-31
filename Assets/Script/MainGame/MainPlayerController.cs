@@ -111,7 +111,7 @@ public class MainPlayerController : MonoBehaviour
             anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal")))/*+ Mathf.Abs(Input.GetAxis("Vertical"))*/);
 
             //CheckGround();
-            CheckBox();
+            //CheckBox();
 
 
         }
@@ -133,10 +133,12 @@ public class MainPlayerController : MonoBehaviour
             Debug.Log("Ground");
             anim.SetBool("Lading", false);
             anim.SetBool("Jump", false);
+           
         }
 
-        if (isClimb)
+        if (isClimb && !Isjump)
         {
+
 
             if (Input.GetKey(KeyCode.W))
             {
@@ -165,7 +167,7 @@ public class MainPlayerController : MonoBehaviour
                 anim.SetBool("IsClimb", true);
                 Debug.Log("down");
             }
-          
+
 
             else
             {
@@ -177,13 +179,17 @@ public class MainPlayerController : MonoBehaviour
 
             }
         }
+
         else
         {
             anim.SetBool("IsClimb", false);
             charController.height = 1.86f;
         }
 
+        
     }
+
+   
     private void JumpInput()
     {
 
