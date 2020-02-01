@@ -189,7 +189,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 83207659}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.27, y: 3.3, z: -19.7}
+  m_LocalPosition: {x: -12.39, y: 3.3, z: -19.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 83207659}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 986d6a55896f9824b9400194ec5ece60, type: 3}
   m_Name: 
@@ -961,12 +961,14 @@ MonoBehaviour:
   current: {x: 0, y: 0, z: 0}
   speedCilmb: 2
   labber: {fileID: 348828421}
+  pushItem: {fileID: 0}
   mask:
     serializedVersion: 2
     m_Bits: 1
   rayMark: {fileID: 1071119194}
   distanceGround: 0
   charController: {fileID: 0}
+  Isjump: 0
 --- !u!136 &733251459
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2534,6 +2536,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Box
+      objectReference: {fileID: 0}
+    - target: {fileID: 3827592528689650959, guid: 9373251fa1408c94c83c6bbb8f53f8b5,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3827592528689650959, guid: 9373251fa1408c94c83c6bbb8f53f8b5,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9373251fa1408c94c83c6bbb8f53f8b5, type: 3}

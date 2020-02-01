@@ -22,7 +22,10 @@ public class MainPlayerController : MonoBehaviour
     //Rigidbody rigidbody;
     public float speedCilmb;
     public Transform labber;
-   
+
+
+    [Header("Push")]
+    public PushItem pushItem;
 
 
     [Header("CheckDistGround")]
@@ -36,7 +39,7 @@ public class MainPlayerController : MonoBehaviour
     public CharacterController charController;
     private Vector3 moveDirection;
     private Vector3 moveDirection_C;
-    private bool Isjump = false;
+    public bool Isjump = false;
 
     // Start is called before the first frame update
     void Start()
@@ -136,7 +139,7 @@ public class MainPlayerController : MonoBehaviour
            
         }
 
-        if (isClimb && !Isjump)
+        if (isClimb && !Isjump && !pushItem) 
         {
 
 

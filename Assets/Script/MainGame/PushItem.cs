@@ -19,7 +19,7 @@ public class PushItem : MonoBehaviour
         if (isPush)
         {
 
-            if (Input.GetKey(KeyCode.E) && GameManager.IsInputEnabled) 
+            if (Input.GetKey(KeyCode.E) && GameManager.IsInputEnabled && !MainPlayerController.instance.isClimb && !MainPlayerController.instance.Isjump)  
             {
 
                 //MainPlayerController.instance.anim.SetBool("IsPush", true);
@@ -57,23 +57,25 @@ public class PushItem : MonoBehaviour
         //    Debug.Log("GetButtonDownA");
         //}
     }
+   
 
-    bool isPush;
-    private void OnTriggerStay(Collider other)
+    public bool isPush;
+    public void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("Isplayer");
+            MainPlayerController.instance.charController.height = 1.7f;
             isPush = true;
             
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
-        isPush = false;
-        MainPlayerController.instance.anim.SetBool("IsPush", false);
-        MainPlayerController.instance.charController.height = 1.86f;
+        //isPush = false;
+        //MainPlayerController.instance.anim.SetBool("IsPush", false);
+        //MainPlayerController.instance.charController.height = 1.86f;
 
     }
 
