@@ -27,6 +27,8 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate ()
     {
+
+       
         if (cameraControl.switchInput == false) 
         {
             isControlPlayer = true;
