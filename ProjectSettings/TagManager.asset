@@ -10,6 +10,7 @@ TagManager:
   - Ladder
   - Ob_Box
   - Hang to crouch
+  - Enemy
   layers:
   - Default
   - TransparentFX

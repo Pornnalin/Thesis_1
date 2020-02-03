@@ -24,8 +24,7 @@ public class MainPlayerController : MonoBehaviour
     public Transform labber;
 
 
-    [Header("Push")]
-    public PushItem pushItem;
+   
 
 
     [Header("CheckDistGround")]
@@ -139,7 +138,7 @@ public class MainPlayerController : MonoBehaviour
            
         }
 
-        if (isClimb && !Isjump && !pushItem) 
+        if (isClimb && !Isjump) 
         {
 
 
@@ -242,13 +241,13 @@ public class MainPlayerController : MonoBehaviour
         {
             labber.transform.position = other.transform.position;
         }
-
+       
         //if(other.gameObject.tag== "Hang to crouch")
         //{
         //    GameManager.IsInputEnabled = false;
         //    anim.SetBool("Hang to crouch",true);
         //}
-      
+
     }
 
     public void OnTriggerStay(Collider other)
@@ -261,6 +260,8 @@ public class MainPlayerController : MonoBehaviour
             //moveDirection = new Vector3(0, Input.GetAxis("Vertical"), 0);
             //anim.SetBool("IsClimb", true);
         }
+
+       
 
     }
 

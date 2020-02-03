@@ -7,9 +7,13 @@ public class PushItem : MonoBehaviour
     Rigidbody _rigidbody;
     public float speed;
     Vector3 dir;
+
+    public bool isPush;
+
     // Start is called before the first frame update
     void Start()
     {
+        isPush = false;
         _rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -40,7 +44,7 @@ public class PushItem : MonoBehaviour
             }
            
         }
-
+       
         
 
 
@@ -59,7 +63,7 @@ public class PushItem : MonoBehaviour
     }
    
 
-    public bool isPush;
+    
     public void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
