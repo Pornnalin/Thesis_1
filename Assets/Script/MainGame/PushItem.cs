@@ -73,9 +73,9 @@ public class PushItem : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        //isPush = false;
-        //MainPlayerController.instance.anim.SetBool("IsPush", false);
-        //MainPlayerController.instance.charController.height = 1.86f;
+        isPush = false;
+        MainPlayerController.instance.anim.SetBool("IsPush", false);
+        MainPlayerController.instance.charController.height = 1.86f;
 
     }
 
