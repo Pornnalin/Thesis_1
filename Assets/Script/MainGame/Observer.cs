@@ -22,8 +22,8 @@ public class Observer : MonoBehaviour
             Vector3 direction = player.position - transform.position + Vector3.forward;
             Ray ray = new Ray(transform.position, direction);
             RaycastHit raycastHit;
-
-            if(Physics.Raycast(ray,out raycastHit))
+            //Debug.DrawLine(ray.origin, ray, Color.red);
+            if (Physics.Raycast(ray,out raycastHit))
             {
                 Debug.Log("HitPlaye");
                 
