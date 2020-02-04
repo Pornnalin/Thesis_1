@@ -6,7 +6,7 @@ public class MainPlayerController : MonoBehaviour
 {
     public static MainPlayerController instance;
     [Header("PlayerMovement")]
-    public float moveSpeed;
+    public float _moveSpeed;
     public float jumpForce;
     public float gravityScale;
     public GameObject playerModel;
@@ -20,11 +20,14 @@ public class MainPlayerController : MonoBehaviour
     public bool isClimb = false;
     public Vector3 current;
     //Rigidbody rigidbody;
-    public float speedCilmb;
+    public float _speedCilmb;
     public Transform labber;
 
-
-   
+    [Header("Crouched")]
+    public bool isStartCrouched = false;
+    public bool isCrouched = false;
+    public float _speedCrouched;
+    public int num = 0;
 
 
     [Header("CheckDistGround")]
@@ -39,7 +42,10 @@ public class MainPlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 moveDirection_C;
     public bool Isjump = false;
+  
 
+
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -66,6 +72,7 @@ public class MainPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
         if (GameManager.IsInputEnabled)
         {
             float yStore = moveDirection.y;
@@ -74,7 +81,7 @@ public class MainPlayerController : MonoBehaviour
 
             moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, 0/* Input.GetAxis("Vertical")*/);
             moveDirection.Normalize();
-            moveDirection = moveDirection * moveSpeed;
+            moveDirection = moveDirection * _moveSpeed;
             moveDirection.y = yStore;
 
 
@@ -82,21 +89,15 @@ public class MainPlayerController : MonoBehaviour
             if (charController.isGrounded)
             {
                 JumpInput();
-                //if (isClimb)
-                //{
-                //    StartClimb();
-                //}
+              
 
             }
             else
             {
 
             }
-            //climb
 
-
-
-
+           
 
             //rotation
             //RotationChar();
@@ -114,81 +115,122 @@ public class MainPlayerController : MonoBehaviour
 
             //CheckGround();
             //CheckBox();
-
+            if (isCrouched)
+            {
+                _moveSpeed = 1f;
+            }
+            else
+            {
+                _moveSpeed = 5f;
+            }
 
         }
     }
     public void FixedUpdate()
     {
-        if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f))
+        if (GameManager.IsInputEnabled)
         {
-            Debug.DrawLine(rayMark.transform.position, Vector3.down, Color.red);
-            Debug.Log("we are in air");
-            anim.SetBool("Jump", true);
-            Debug.Log(distanceGround + "while fall");
-            anim.SetBool("Lading", true);
-
-        }
-        else
-        {
-            Debug.Log(distanceGround + "end");
-            Debug.Log("Ground");
-            anim.SetBool("Lading", false);
-            anim.SetBool("Jump", false);
-           
-        }
-
-        if (isClimb && !Isjump) 
-        {
-
-
-            if (Input.GetKey(KeyCode.W))
+            //checkGround while jump
+            if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f))
             {
-                anim.SetBool("IsHang", false);
-                //rigidbody.constraints = RigidbodyConstraints.None;
-                charController.height = 1.2f;
-                //transform.Translate(Vector3.up * Time.deltaTime * 100f);
-                //moveDirection.y += speedCilmb * Time.deltaTime;
-                //moveDirection.Normalize();
-                //moveDirection.y = current.y;
-                gravityScale = 0;
-                transform.Translate(Vector3.up * Input.GetAxis("Vertical") * speedCilmb * Time.deltaTime);
-                Debug.Log("up");
-                anim.SetBool("IsClimb", true);
+                Debug.DrawLine(rayMark.transform.position, Vector3.down, Color.red);
+                Debug.Log("we are in air");
+                anim.SetBool("Jump", true);
+                Debug.Log(distanceGround + "while fall");
+                anim.SetBool("Lading", true);
 
-
+            }
+            else
+            {
+                Debug.Log(distanceGround + "end");
+                Debug.Log("Ground");
+                anim.SetBool("Lading", false);
+                anim.SetBool("Jump", false);
 
             }
 
-            else if (Input.GetKey(KeyCode.S))
+            //climb
+            if (isClimb && !Isjump)
             {
-                anim.SetBool("IsHang", false);
-                charController.height = 1.2f;
-                //gravityScale = 1;
-                transform.Translate(Vector3.up * Input.GetAxis("Vertical") * speedCilmb * Time.deltaTime);
-                anim.SetBool("IsClimb", true);
-                Debug.Log("down");
-            }
 
+
+                if (Input.GetKey(KeyCode.W))
+                {
+                    anim.SetBool("IsHang", false);
+                    charController.height = 1.2f;
+                    gravityScale = 0;
+                    transform.Translate(Vector3.up * Input.GetAxis("Vertical") * _speedCilmb * Time.deltaTime);
+                    Debug.Log("up");
+                    anim.SetBool("IsClimb", true);
+
+
+
+                }
+
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    anim.SetBool("IsHang", false);
+                    charController.height = 1.2f;
+                    //gravityScale = 1;
+                    transform.Translate(Vector3.up * Input.GetAxis("Vertical") * _speedCilmb * Time.deltaTime);
+                    anim.SetBool("IsClimb", true);
+                    Debug.Log("down");
+                }
+
+
+                else
+                {
+
+                    anim.SetBool("IsClimb", false);
+                    charController.height = 1.86f;
+                    anim.SetBool("IsHang", true);
+
+
+                }
+            }
 
             else
             {
-
                 anim.SetBool("IsClimb", false);
                 charController.height = 1.86f;
-                anim.SetBool("IsHang", true);
+            }
 
+          
+            //crouched
+            if (Input.GetKeyUp(KeyCode.LeftAlt) && !Isjump)   
+            {
+                Debug.Log("num = " + num);
+                Debug.Log("crouched");
+                isStartCrouched = true;
+                anim.SetBool("IsStartCrouched", true);
+                isCrouched = true;
+
+                if (isCrouched && !Isjump) 
+                {
+                    num += 1;
+                    _moveSpeed = 1f;
+                    anim.SetBool("IsCrouching", true);
+                    anim.SetBool("Jump", false);
+                }
+               
+            }
+
+            if (num >= 2)
+            {
+                num = 0;
+                isCrouched = false;
+                isStartCrouched = false;
+                anim.SetBool("IsStartCrouched", false);
 
             }
-        }
+            else
+            {
 
-        else
-        {
-            anim.SetBool("IsClimb", false);
-            charController.height = 1.86f;
-        }
+               
+            }
 
-        
+
+        }
     }
 
    
@@ -198,17 +240,19 @@ public class MainPlayerController : MonoBehaviour
         moveDirection.y = 0f;
 
 
-        if (Input.GetKeyDown(KeyCode.Space) && !Isjump)
+        if (Input.GetKeyDown(KeyCode.Space) && !Isjump && !isCrouched  && !isStartCrouched) 
         {
+           
             moveDirection.y = jumpForce;
-            moveSpeed = 3;
+            _moveSpeed = 3;
             anim.SetBool("Jump", true);
             Isjump = true;
             Debug.Log("Jump");
         }
         else
         {
-            moveSpeed = 5;
+
+            _moveSpeed = 5;
             anim.SetBool("Jump", false);
             Isjump = false;
         }
@@ -235,20 +279,20 @@ public class MainPlayerController : MonoBehaviour
         scalePlayer.transform.localScale = scaleP;
     }
 
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Ladder")
-        {
-            labber.transform.position = other.transform.position;
-        }
+    //public void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.tag == "Ladder")
+    //    {
+    //        labber.transform.position = other.transform.position;
+    //    }
        
-        //if(other.gameObject.tag== "Hang to crouch")
-        //{
-        //    GameManager.IsInputEnabled = false;
-        //    anim.SetBool("Hang to crouch",true);
-        //}
+    //    //if(other.gameObject.tag== "Hang to crouch")
+    //    //{
+    //    //    GameManager.IsInputEnabled = false;
+    //    //    anim.SetBool("Hang to crouch",true);
+    //    //}
 
-    }
+    //}
 
     public void OnTriggerStay(Collider other)
     {

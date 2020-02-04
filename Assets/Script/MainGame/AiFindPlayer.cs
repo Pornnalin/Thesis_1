@@ -23,11 +23,12 @@ public class AiFindPlayer : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, distance)) 
         {
-            if (hitInfo.collider != null)
+            if (hitInfo.collider.CompareTag("Player")) 
             {
                 Debug.Log(hitInfo.collider.gameObject.name);
-
+                Debug.Log("PlayerDead");
             }
+           
             else
             {
                 Debug.Log("Not found anything");
