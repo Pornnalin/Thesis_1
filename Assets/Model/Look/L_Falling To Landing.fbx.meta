@@ -84,7 +84,12 @@ ModelImporter:
     9500000: //RootNode
     13700000: character2:pTorus2
     2186277476908879412: ImportLogs
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 2f1f04b6e51191f45a191770294229d0, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
