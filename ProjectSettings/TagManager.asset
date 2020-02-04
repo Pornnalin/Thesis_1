@@ -11,6 +11,7 @@ TagManager:
   - Ob_Box
   - Hang to crouch
   - Enemy
+  - Ceiling
   layers:
   - Default
   - TransparentFX

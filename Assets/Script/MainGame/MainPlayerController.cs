@@ -28,6 +28,7 @@ public class MainPlayerController : MonoBehaviour
     public bool isCrouched = false;
     public float _speedCrouched;
     public int num = 0;
+    private float startHeight;
 
 
     [Header("CheckDistGround")]
@@ -55,6 +56,9 @@ public class MainPlayerController : MonoBehaviour
         anim.SetBool("Jump", false);
         current = transform.position;
         //rigidbody = GetComponent<Rigidbody>();
+        charController.height = 1.78f;
+        startHeight = charController.height;
+
 
     }
     private void Awake()
@@ -75,6 +79,7 @@ public class MainPlayerController : MonoBehaviour
        
         if (GameManager.IsInputEnabled)
         {
+
             float yStore = moveDirection.y;
             //float hMove = Input.GetAxis("Horizontal");
             //float VMove = Input.GetAxis("Vertical");
@@ -97,7 +102,7 @@ public class MainPlayerController : MonoBehaviour
 
             }
 
-           
+         
 
             //rotation
             //RotationChar();
@@ -117,7 +122,12 @@ public class MainPlayerController : MonoBehaviour
             //CheckBox();
             if (isCrouched)
             {
-                _moveSpeed = 1f;
+                //_moveSpeed = 1f;
+                //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
+                
+                CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                cc.enabled = false;
+
             }
             else
             {
@@ -195,44 +205,47 @@ public class MainPlayerController : MonoBehaviour
                 charController.height = 1.86f;
             }
 
-          
-            //crouched
-            if (Input.GetKeyUp(KeyCode.LeftAlt) && !Isjump)   
-            {
-                Debug.Log("num = " + num);
-                Debug.Log("crouched");
-                isStartCrouched = true;
-                anim.SetBool("IsStartCrouched", true);
-                isCrouched = true;
-
-                if (isCrouched && !Isjump) 
-                {
-                    num += 1;
-                    _moveSpeed = 1f;
-                    anim.SetBool("IsCrouching", true);
-                    anim.SetBool("Jump", false);
-                }
-               
-            }
-
-            if (num >= 2)
-            {
-                num = 0;
-                isCrouched = false;
-                isStartCrouched = false;
-                anim.SetBool("IsStartCrouched", false);
-
-            }
-            else
-            {
-
-               
-            }
-
+            CrounchedInput();
 
         }
     }
 
+    private void CrounchedInput()
+    {
+        if (Input.GetKeyUp(KeyCode.C) && !Isjump)
+        {
+            Debug.Log("num = " + num);
+            Debug.Log("crouched");
+            isStartCrouched = true;
+            anim.SetBool("IsStartCrouched", true);
+            isCrouched = true;
+
+            if (isCrouched && !Isjump)
+            {
+
+                num += 1;
+                _moveSpeed = 1f;
+                anim.SetBool("IsCrouching", true);
+                anim.SetBool("Jump", false);
+            }
+
+        }
+
+        if (num >= 2)
+        {
+
+            num = 0;
+            isCrouched = false;
+            isStartCrouched = false;
+            anim.SetBool("IsStartCrouched", false);
+
+        }
+        else
+        {
+
+
+        }
+    }
    
     private void JumpInput()
     {
@@ -260,37 +273,39 @@ public class MainPlayerController : MonoBehaviour
 
     }
 
-    bool isTrunRight;
-    private void RotationChar()
-    {
-        Vector3 scaleP = scalePlayer.transform.localScale;
-        float hMove = Input.GetAxis("Horizontal");
+    //bool isTrunRight;
+    //private void RotationChar()
+    //{
+    //    Vector3 scaleP = scalePlayer.transform.localScale;
+    //    float hMove = Input.GetAxis("Horizontal");
 
-        if (hMove < 0)
-        {
-            isTrunRight = false;
-            scaleP.z = -1;
-        }
-        if (hMove > 0)
-        {
-            isTrunRight = true;
-            scaleP.z = 1;
-        }
-        scalePlayer.transform.localScale = scaleP;
-    }
+    //    if (hMove < 0)
+    //    {
+    //        isTrunRight = false;
+    //        scaleP.z = -1;
+    //    }
+    //    if (hMove > 0)
+    //    {
+    //        isTrunRight = true;
+    //        scaleP.z = 1;
+    //    }
+    //    scalePlayer.transform.localScale = scaleP;
+    //}
 
     //public void OnTriggerEnter(Collider other)
     //{
-    //    if (other.gameObject.tag == "Ladder")
-    //    {
-    //        labber.transform.position = other.transform.position;
-    //    }
-       
+    //    //if (other.gameObject.tag == "Ladder")
+    //    //{
+    //    //    labber.transform.position = other.transform.position;
+    //    //}
+
     //    //if(other.gameObject.tag== "Hang to crouch")
     //    //{
     //    //    GameManager.IsInputEnabled = false;
     //    //    anim.SetBool("Hang to crouch",true);
     //    //}
+
+        
 
     //}
 
@@ -304,9 +319,8 @@ public class MainPlayerController : MonoBehaviour
             //moveDirection = new Vector3(0, Input.GetAxis("Vertical"), 0);
             //anim.SetBool("IsClimb", true);
         }
-
        
-
+               
     }
 
     public void OnTriggerExit(Collider other)
@@ -317,8 +331,16 @@ public class MainPlayerController : MonoBehaviour
         anim.SetBool("IsHang", false);
         //GameManager.IsInputEnabled = true;
         //anim.SetBool("Hang to crouch", false);
-    }
 
+    }
+    public void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (charController.gameObject.tag == "ceiling")
+        {
+            Debug.Log("hit");
+        }
+       
+    }
 
     public void CheckBox()
     {
@@ -344,6 +366,7 @@ public class MainPlayerController : MonoBehaviour
         //}
     }
 }
+
 
 
     
