@@ -7,6 +7,7 @@ public class MainPlayerController : MonoBehaviour
     public static MainPlayerController instance;
     [Header("PlayerMovement")]
     public float _moveSpeed;
+    public float _startMoveSpeed;
     public float jumpForce;
     public float gravityScale;
     public GameObject playerModel;
@@ -44,10 +45,10 @@ public class MainPlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 moveDirection_C;
     public bool Isjump = false;
-  
 
 
-   
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,7 +60,7 @@ public class MainPlayerController : MonoBehaviour
         //rigidbody = GetComponent<Rigidbody>();
         //charController.height = 1.78f;
         _colliderCha = GetComponent<Collider>();
-
+        _startMoveSpeed = _moveSpeed;
 
     }
     private void Awake()
@@ -77,7 +78,9 @@ public class MainPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        Debug.Log("move" + _moveSpeed);
+        Debug.Log("start" + _startMoveSpeed);
+
         if (GameManager.IsInputEnabled)
         {
 
@@ -95,7 +98,7 @@ public class MainPlayerController : MonoBehaviour
             if (charController.isGrounded)
             {
                 JumpInput();
-              
+
 
             }
             else
@@ -107,7 +110,7 @@ public class MainPlayerController : MonoBehaviour
             if (isCrouched)
             {
 
-                 _moveSpeed = 1f;
+                _moveSpeed = 1f;
                 //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
                 CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 mycc.height = 1.24f;
@@ -118,43 +121,43 @@ public class MainPlayerController : MonoBehaviour
                 CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
 
 
-                //cc.enabled = false;
-                //if (Input.GetKey(KeyCode.D))
-                //{
-                //    transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
-                //}
-                //else if (Input.GetKey(KeyCode.A))
-                //{
-                //    transform.Translate(Vector3.left * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
-                //}
+               
             }
             else
             {
                 //CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
                 //cc.enabled = true;
-                _moveSpeed = 5f;
+                //_moveSpeed = 5f;
+                _moveSpeed = _startMoveSpeed;
                 CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 mycc.height = 1.78f;
                 mycc.center = new Vector3(0, 0.94f, 0);
+
+                charController.height = 1.86f;
+                charController.center = new Vector3(0, 0.96f, 0);
+                CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
             }
+
+            CheckCeilie();
 
             //rotation
             //RotationChar();
             transform.right = Vector3.Slerp(transform.right, Vector3.right * Input.GetAxis("Horizontal"), 0.1f);
 
             moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
-           
+
 
             charController.Move(moveDirection * Time.deltaTime);
 
-           
+
 
             anim.SetBool("isGrounded", charController.isGrounded);
             anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal")))/*+ Mathf.Abs(Input.GetAxis("Vertical"))*/);
 
             //CheckGround();
             //CheckBox();
-         
+           
+
 
         }
     }
@@ -162,7 +165,7 @@ public class MainPlayerController : MonoBehaviour
     {
         if (GameManager.IsInputEnabled)
         {
-            CheclCeilie();
+            
             //checkGround while jump
             if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f))
             {
@@ -228,7 +231,7 @@ public class MainPlayerController : MonoBehaviour
                 charController.height = 1.86f;
             }
 
-           
+
         }
     }
 
@@ -268,16 +271,16 @@ public class MainPlayerController : MonoBehaviour
 
         }
     }
-   
+
     private void JumpInput()
     {
 
         moveDirection.y = 0f;
 
 
-        if (Input.GetKeyDown(KeyCode.Space) && !Isjump && !isCrouched  && !isStartCrouched) 
+        if (Input.GetKeyDown(KeyCode.Space) && !Isjump && !isCrouched && !isStartCrouched)
         {
-           
+
             moveDirection.y = jumpForce;
             _moveSpeed = 3;
             anim.SetBool("Jump", true);
@@ -287,7 +290,8 @@ public class MainPlayerController : MonoBehaviour
         else
         {
 
-            _moveSpeed = 5;
+            //_moveSpeed = 5;
+            _moveSpeed = _startMoveSpeed;
             anim.SetBool("Jump", false);
             Isjump = false;
         }
@@ -327,7 +331,7 @@ public class MainPlayerController : MonoBehaviour
     //    //    anim.SetBool("Hang to crouch",true);
     //    //}
 
-        
+
 
     //}
 
@@ -341,8 +345,8 @@ public class MainPlayerController : MonoBehaviour
             //moveDirection = new Vector3(0, Input.GetAxis("Vertical"), 0);
             //anim.SetBool("IsClimb", true);
         }
-       
-               
+
+
     }
 
     public void OnTriggerExit(Collider other)
@@ -361,7 +365,7 @@ public class MainPlayerController : MonoBehaviour
         {
             Debug.Log("hit");
         }
-       
+
     }
 
     public void CheckBox()
@@ -387,19 +391,27 @@ public class MainPlayerController : MonoBehaviour
 
         //}
     }
-    public void CheclCeilie()
+    public void CheckCeilie()
     {
         RaycastHit hit;
-        Ray ray = new Ray(_checkCeilie.transform.position, -transform.up);
-        if (Physics.Raycast(_checkCeilie.transform.position, -Vector3.up, out hit))
+        
+        Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
+        if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
         {
-            print(hit.collider.gameObject.tag);
-            //print("Found an object - distance: " + hit.distance);
-            Debug.DrawLine(ray.origin, hit.point, Color.red);
-        }
-        else
-        {
-            Debug.DrawLine(ray.origin, hit.point, Color.green);
+            if (hit.collider.gameObject.CompareTag("Ceiling"))
+            {
+                num = 0;
+                Debug.Log("hitCeiling");
+            }
+            else
+            {
+                if (Input.GetKeyUp(KeyCode.C))
+                {
+                    anim.SetBool("IsStartCrouched", false);
+                }
+            }
+            //hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
+            Debug.Log("i've hit somthing");
         }
     }
 }
