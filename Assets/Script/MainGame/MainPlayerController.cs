@@ -45,6 +45,7 @@ public class MainPlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 moveDirection_C;
     public bool Isjump = false;
+    public float _heightChara;
 
 
 
@@ -61,6 +62,8 @@ public class MainPlayerController : MonoBehaviour
         //charController.height = 1.78f;
         _colliderCha = GetComponent<Collider>();
         _startMoveSpeed = _moveSpeed;
+       
+        _heightChara = charController.height;
 
     }
     private void Awake()
@@ -80,6 +83,7 @@ public class MainPlayerController : MonoBehaviour
     {
         Debug.Log("move" + _moveSpeed);
         Debug.Log("start" + _startMoveSpeed);
+        Debug.Log("Height" + _heightChara);
 
         if (GameManager.IsInputEnabled)
         {
@@ -133,7 +137,9 @@ public class MainPlayerController : MonoBehaviour
                 mycc.height = 1.78f;
                 mycc.center = new Vector3(0, 0.94f, 0);
 
-                charController.height = 1.86f;
+                //charController.height = 1.86f;
+                charController.height = _heightChara;
+                //_heightChara = charController.height;
                 charController.center = new Vector3(0, 0.96f, 0);
                 CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
             }
@@ -218,7 +224,9 @@ public class MainPlayerController : MonoBehaviour
                 {
 
                     anim.SetBool("IsClimb", false);
-                    charController.height = 1.86f;
+                    //charController.height = 1.86f;
+                    charController.height = _heightChara;
+                    //_heightChara = charController.height;
                     anim.SetBool("IsHang", true);
 
 
@@ -228,7 +236,9 @@ public class MainPlayerController : MonoBehaviour
             else
             {
                 anim.SetBool("IsClimb", false);
-                charController.height = 1.86f;
+                //charController.height = 1.86f;
+                charController.height = _heightChara;
+                //_heightChara = charController.height;
             }
 
 
