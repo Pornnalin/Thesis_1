@@ -102,7 +102,41 @@ public class MainPlayerController : MonoBehaviour
 
             }
 
-         
+            CrounchedInput();
+            if (isCrouched)
+            {
+
+
+                _moveSpeed = 1f;
+                //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
+                CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                mycc.height = 1.24f;
+                mycc.center = new Vector3(0, 0.62f, 0);
+
+                charController.height = 1.25f;
+                charController.center = new Vector3(0, 0.64f, 0);
+                CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+
+
+                //cc.enabled = false;
+                //if (Input.GetKey(KeyCode.D))
+                //{
+                //    transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
+                //}
+                //else if (Input.GetKey(KeyCode.A))
+                //{
+                //    transform.Translate(Vector3.left * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
+                //}
+            }
+            else
+            {
+                //CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                //cc.enabled = true;
+                _moveSpeed = 5f;
+                CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                mycc.height = 1.78f;
+                mycc.center = new Vector3(0, 0.94f, 0);
+            }
 
             //rotation
             //RotationChar();
@@ -193,37 +227,7 @@ public class MainPlayerController : MonoBehaviour
                 charController.height = 1.86f;
             }
 
-            CrounchedInput();
-            if (isCrouched)
-            {
-                _moveSpeed = 1f;
-                //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
-                //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-                //mycc.height = 1.24f;
-                //mycc.center = new Vector3(0, 0.62f, 0);
-
-                //charController.height = 1.25f;
-                //charController.center = new Vector3(0, 0.64f, 0);
-
-                //cc.enabled = false;
-                //if (Input.GetKey(KeyCode.D))
-                //{
-                //    transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
-                //}
-                //else if (Input.GetKey(KeyCode.A))
-                //{
-                //    transform.Translate(Vector3.left * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
-                //}
-            }
-            else
-            {
-                //CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
-                //cc.enabled = true;
-                //_moveSpeed = 5f;
-                //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-                //mycc.height = 1.78f;
-                //mycc.center = new Vector3(0, 0.94f, 0);
-            }
+           
         }
     }
 
