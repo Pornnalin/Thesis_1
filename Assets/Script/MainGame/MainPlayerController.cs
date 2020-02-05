@@ -28,7 +28,7 @@ public class MainPlayerController : MonoBehaviour
     public bool isCrouched = false;
     public float _speedCrouched;
     public int num = 0;
-    private float startHeight;
+    private Collider _colliderCha;
 
 
     [Header("CheckDistGround")]
@@ -56,8 +56,8 @@ public class MainPlayerController : MonoBehaviour
         anim.SetBool("Jump", false);
         current = transform.position;
         //rigidbody = GetComponent<Rigidbody>();
-        charController.height = 1.78f;
-        startHeight = charController.height;
+        //charController.height = 1.78f;
+        _colliderCha = GetComponent<Collider>();
 
 
     }
@@ -120,19 +120,7 @@ public class MainPlayerController : MonoBehaviour
 
             //CheckGround();
             //CheckBox();
-            if (isCrouched)
-            {
-                //_moveSpeed = 1f;
-                //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
-                
-                CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
-                cc.enabled = false;
-
-            }
-            else
-            {
-                _moveSpeed = 5f;
-            }
+         
 
         }
     }
@@ -206,7 +194,36 @@ public class MainPlayerController : MonoBehaviour
             }
 
             CrounchedInput();
+            if (isCrouched)
+            {
+                _moveSpeed = 1f;
+                //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
+                //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                //mycc.height = 1.24f;
+                //mycc.center = new Vector3(0, 0.62f, 0);
 
+                //charController.height = 1.25f;
+                //charController.center = new Vector3(0, 0.64f, 0);
+
+                //cc.enabled = false;
+                //if (Input.GetKey(KeyCode.D))
+                //{
+                //    transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
+                //}
+                //else if (Input.GetKey(KeyCode.A))
+                //{
+                //    transform.Translate(Vector3.left * Input.GetAxis("Horizontal") * _speedCrouched * Time.deltaTime);
+                //}
+            }
+            else
+            {
+                //CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                //cc.enabled = true;
+                //_moveSpeed = 5f;
+                //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                //mycc.height = 1.78f;
+                //mycc.center = new Vector3(0, 0.94f, 0);
+            }
         }
     }
 
