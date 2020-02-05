@@ -29,6 +29,7 @@ public class MainPlayerController : MonoBehaviour
     public float _speedCrouched;
     public int num = 0;
     private Collider _colliderCha;
+    public GameObject _checkCeilie;
 
 
     [Header("CheckDistGround")]
@@ -106,8 +107,7 @@ public class MainPlayerController : MonoBehaviour
             if (isCrouched)
             {
 
-
-                _moveSpeed = 1f;
+                 _moveSpeed = 1f;
                 //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
                 CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 mycc.height = 1.24f;
@@ -162,6 +162,7 @@ public class MainPlayerController : MonoBehaviour
     {
         if (GameManager.IsInputEnabled)
         {
+            CheclCeilie();
             //checkGround while jump
             if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f))
             {
@@ -385,6 +386,21 @@ public class MainPlayerController : MonoBehaviour
         //    }
 
         //}
+    }
+    public void CheclCeilie()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(_checkCeilie.transform.position, -transform.up);
+        if (Physics.Raycast(_checkCeilie.transform.position, -Vector3.up, out hit))
+        {
+            print(hit.collider.gameObject.tag);
+            //print("Found an object - distance: " + hit.distance);
+            Debug.DrawLine(ray.origin, hit.point, Color.red);
+        }
+        else
+        {
+            Debug.DrawLine(ray.origin, hit.point, Color.green);
+        }
     }
 }
 
