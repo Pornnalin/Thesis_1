@@ -47,7 +47,7 @@ public class MainPlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 moveDirection_C;
     public bool Isjump = false;
-
+    public Vector3 _centerCharacter;
     
 
     // Start is called before the first frame update
@@ -62,8 +62,9 @@ public class MainPlayerController : MonoBehaviour
         //charController.height = 1.78f;
         //_colliderCha = GetComponent<Collider>();
         _startMoveSpeed = _moveSpeedCurrent;
-        closeWay[0].SetActive(true);
-
+        closeWay[1].SetActive(false);
+        _centerCharacter = charController.center;
+        
     }
     private void Awake()
     {
@@ -82,7 +83,7 @@ public class MainPlayerController : MonoBehaviour
     {
         Debug.Log("move" + _moveSpeedCurrent);
         Debug.Log("start" + _startMoveSpeed);
-
+        
 
         if (GameManager.IsInputEnabled)
         {
@@ -142,7 +143,8 @@ public class MainPlayerController : MonoBehaviour
 
                 CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
                 cc.height = 1.86f;
-                cc.center = new Vector3(0, 0.96f, 0);
+                //cc.center = new Vector3(0, 0.96f, 0);
+                charController.center = _centerCharacter;
             }
 
             CheckCeilie();
