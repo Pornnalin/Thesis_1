@@ -51,8 +51,10 @@ public class Controller : MonoBehaviour
         {
             Debug.Log(cameraControl.switchInput);
             Debug.Log("switchInput");
-            float horizontal = Input.GetAxis("Horizontal_Inverst");
-            float vertical = Input.GetAxis("Vertical_Inverst");
+            //float horizontal = -Input.GetAxis("Horizontal_Inverst");
+            //float vertical = Input.GetAxis("Vertical_Inverst");
+            float horizontal = -Input.GetAxis("Vertical");
+            float vertical = Input.GetAxis("Horizontal");
             m_Movement.Set(horizontal, 0f, vertical );
             m_Movement.Normalize();
 

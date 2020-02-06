@@ -6,7 +6,7 @@ public class MainPlayerController : MonoBehaviour
 {
     public static MainPlayerController instance;
     [Header("PlayerMovement")]
-    public float _moveSpeed;
+    public float _moveSpeedCurrent;
     public float _startMoveSpeed;
     public float jumpForce;
     public float gravityScale;
@@ -23,13 +23,14 @@ public class MainPlayerController : MonoBehaviour
     //Rigidbody rigidbody;
     public float _speedCilmb;
     public Transform labber;
+    bool isClimbing;
 
     [Header("Crouched")]
     public bool isStartCrouched = false;
     public bool isCrouched = false;
     public float _speedCrouched;
     public int num = 0;
-    private Collider _colliderCha;
+    //private Collider _colliderCha;
     public GameObject _checkCeilie;
 
 
@@ -45,8 +46,12 @@ public class MainPlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 moveDirection_C;
     public bool Isjump = false;
-    public float _heightChara;
 
+    
+   
+    
+
+  
 
 
 
@@ -60,10 +65,9 @@ public class MainPlayerController : MonoBehaviour
         current = transform.position;
         //rigidbody = GetComponent<Rigidbody>();
         //charController.height = 1.78f;
-        _colliderCha = GetComponent<Collider>();
-        _startMoveSpeed = _moveSpeed;
+        //_colliderCha = GetComponent<Collider>();
+        _startMoveSpeed = _moveSpeedCurrent;
        
-        _heightChara = charController.height;
 
     }
     private void Awake()
@@ -81,9 +85,9 @@ public class MainPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("move" + _moveSpeed);
+        Debug.Log("move" + _moveSpeedCurrent);
         Debug.Log("start" + _startMoveSpeed);
-        Debug.Log("Height" + _heightChara);
+
 
         if (GameManager.IsInputEnabled)
         {
@@ -94,7 +98,7 @@ public class MainPlayerController : MonoBehaviour
 
             moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, 0/* Input.GetAxis("Vertical")*/);
             moveDirection.Normalize();
-            moveDirection = moveDirection * _moveSpeed;
+            moveDirection = moveDirection * _moveSpeedCurrent;
             moveDirection.y = yStore;
 
 
@@ -109,42 +113,64 @@ public class MainPlayerController : MonoBehaviour
             {
 
             }
-
+            //crounch
             CrounchedInput();
             if (isCrouched)
             {
 
-                _moveSpeed = 1f;
+                _moveSpeedCurrent = 1f;
                 //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
                 CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 mycc.height = 1.24f;
                 mycc.center = new Vector3(0, 0.62f, 0);
 
-                charController.height = 1.25f;
-                charController.center = new Vector3(0, 0.64f, 0);
                 CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
-
-
+                cc.height = 1.25f;
+                cc.center = new Vector3(0, 0.64f, 0);
+                //charController.height = 1.25f;
                
+
+
             }
             else
             {
                 //CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
                 //cc.enabled = true;
                 //_moveSpeed = 5f;
-                _moveSpeed = _startMoveSpeed;
+                _moveSpeedCurrent = _startMoveSpeed;
                 CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 mycc.height = 1.78f;
                 mycc.center = new Vector3(0, 0.94f, 0);
 
                 //charController.height = 1.86f;
-                charController.height = _heightChara;
-                //_heightChara = charController.height;
-                charController.center = new Vector3(0, 0.96f, 0);
                 CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                cc.height = 1.86f;
+                //_heightChara = charController.height;
+                cc.center = new Vector3(0, 0.96f, 0); 
             }
 
             CheckCeilie();
+            //Climb
+
+            //if (isClimbing)
+            //{
+            //    charController.height = 1.22f;
+            //    charController.center = new Vector3(0, 1.59f, 0);
+
+            //    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+            //    mycc.height = 1.35f;
+            //    mycc.center = new Vector3(0, 1.71f, 0);
+            //}
+            //else
+            //{
+            //    charController.height = 1.86f;
+            //    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+            //    mycc.height = 1.78f;
+            //    mycc.center = new Vector3(0, 0.94f, 0);
+
+
+            //}
+
 
             //rotation
             //RotationChar();
@@ -192,31 +218,42 @@ public class MainPlayerController : MonoBehaviour
             }
 
             //climb
-            if (isClimb && !Isjump)
+
+            if (isClimb && !Isjump && !isCrouched) 
             {
 
 
                 if (Input.GetKey(KeyCode.W))
                 {
+                    isClimbing = true;
                     anim.SetBool("IsHang", false);
-                    charController.height = 1.2f;
+                    //charController.height = 1.22f;
+                    //charController.center = new Vector3(0, 1.59f, 0);
                     gravityScale = 0;
                     transform.Translate(Vector3.up * Input.GetAxis("Vertical") * _speedCilmb * Time.deltaTime);
                     Debug.Log("up");
                     anim.SetBool("IsClimb", true);
 
-
-
+                    //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                    //mycc.height = 1.35f;
+                    //mycc.center = new Vector3(0, 1.71f, 0);
                 }
 
                 else if (Input.GetKey(KeyCode.S))
                 {
+                    isClimbing = true;
                     anim.SetBool("IsHang", false);
-                    charController.height = 1.2f;
+                    //charController.height = 1.22f;
+                    //charController.center = new Vector3(0, 1.59f, 0);
                     //gravityScale = 1;
                     transform.Translate(Vector3.up * Input.GetAxis("Vertical") * _speedCilmb * Time.deltaTime);
                     anim.SetBool("IsClimb", true);
                     Debug.Log("down");
+
+                    //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                    //mycc.height = 1.35f;
+                    //mycc.center = new Vector3(0, 1.71f, 0);
+
                 }
 
 
@@ -224,8 +261,10 @@ public class MainPlayerController : MonoBehaviour
                 {
 
                     anim.SetBool("IsClimb", false);
-                    //charController.height = 1.86f;
-                    charController.height = _heightChara;
+                    charController.height = 1.86f;
+                    //charController.height = _startHeightChara;
+                    //charController.height = _startHeightChara;
+
                     //_heightChara = charController.height;
                     anim.SetBool("IsHang", true);
 
@@ -235,9 +274,12 @@ public class MainPlayerController : MonoBehaviour
 
             else
             {
+                isClimbing = false;
                 anim.SetBool("IsClimb", false);
                 //charController.height = 1.86f;
-                charController.height = _heightChara;
+                //charController.height = _startHeightChara;
+                //charController.height = _startHeightChara;
+
                 //_heightChara = charController.height;
             }
 
@@ -247,7 +289,7 @@ public class MainPlayerController : MonoBehaviour
 
     private void CrounchedInput()
     {
-        if (Input.GetKeyUp(KeyCode.C) && !Isjump)
+        if (Input.GetKeyDown(KeyCode.C) && !Isjump)
         {
             Debug.Log("num = " + num);
             Debug.Log("crouched");
@@ -259,9 +301,10 @@ public class MainPlayerController : MonoBehaviour
             {
 
                 num += 1;
-                _moveSpeed = 1f;
+                _moveSpeedCurrent = 1f;
                 anim.SetBool("IsCrouching", true);
                 anim.SetBool("Jump", false);
+
             }
 
         }
@@ -292,7 +335,7 @@ public class MainPlayerController : MonoBehaviour
         {
 
             moveDirection.y = jumpForce;
-            _moveSpeed = 3;
+            _moveSpeedCurrent = 3;
             anim.SetBool("Jump", true);
             Isjump = true;
             Debug.Log("Jump");
@@ -301,7 +344,7 @@ public class MainPlayerController : MonoBehaviour
         {
 
             //_moveSpeed = 5;
-            _moveSpeed = _startMoveSpeed;
+            _moveSpeedCurrent = _startMoveSpeed;
             anim.SetBool("Jump", false);
             Isjump = false;
         }
