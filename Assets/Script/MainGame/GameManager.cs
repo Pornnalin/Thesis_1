@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static bool IsInputEnabled = true;
+    public static bool gameEnd = false;
     //public static bool isChagn;
 
     // Start is called before the first frame update
