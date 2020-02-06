@@ -12,7 +12,7 @@ TagManager:
   - Hang to crouch
   - Enemy
   - Ceiling
-  - HandPlayer
+  - Getup
   layers:
   - Default
   - TransparentFX

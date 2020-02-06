@@ -24,6 +24,7 @@ public class MainPlayerController : MonoBehaviour
     public float _speedCilmb;
     public Transform labber;
     bool isClimbing;
+    public GameObject[] closeWay;
 
     [Header("Crouched")]
     public bool isStartCrouched = false;
@@ -48,12 +49,6 @@ public class MainPlayerController : MonoBehaviour
     public bool Isjump = false;
 
     
-   
-    
-
-  
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +62,7 @@ public class MainPlayerController : MonoBehaviour
         //charController.height = 1.78f;
         //_colliderCha = GetComponent<Collider>();
         _startMoveSpeed = _moveSpeedCurrent;
-       
+        closeWay[0].SetActive(true);
 
     }
     private void Awake()
@@ -113,13 +108,16 @@ public class MainPlayerController : MonoBehaviour
             {
 
             }
-            //crounch
+            //Climb
+
+           
+
             CrounchedInput();
             if (isCrouched)
             {
 
                 _moveSpeedCurrent = 1f;
-                //charController.center=Vector3.down*(startHeight-charController.height)/2.0f;
+
                 CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 mycc.height = 1.24f;
                 mycc.center = new Vector3(0, 0.62f, 0);
@@ -128,48 +126,27 @@ public class MainPlayerController : MonoBehaviour
                 cc.height = 1.25f;
                 cc.center = new Vector3(0, 0.64f, 0);
                 //charController.height = 1.25f;
-               
+
 
 
             }
             else
             {
-                //CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
-                //cc.enabled = true;
-                //_moveSpeed = 5f;
+
+                isCrouched = false;
                 _moveSpeedCurrent = _startMoveSpeed;
                 CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 mycc.height = 1.78f;
                 mycc.center = new Vector3(0, 0.94f, 0);
 
-                //charController.height = 1.86f;
+
                 CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
                 cc.height = 1.86f;
-                //_heightChara = charController.height;
-                cc.center = new Vector3(0, 0.96f, 0); 
+                cc.center = new Vector3(0, 0.96f, 0);
             }
 
             CheckCeilie();
-            //Climb
-
-            //if (isClimbing)
-            //{
-            //    charController.height = 1.22f;
-            //    charController.center = new Vector3(0, 1.59f, 0);
-
-            //    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-            //    mycc.height = 1.35f;
-            //    mycc.center = new Vector3(0, 1.71f, 0);
-            //}
-            //else
-            //{
-            //    charController.height = 1.86f;
-            //    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-            //    mycc.height = 1.78f;
-            //    mycc.center = new Vector3(0, 0.94f, 0);
-
-
-            //}
+           
 
 
             //rotation
@@ -222,7 +199,6 @@ public class MainPlayerController : MonoBehaviour
             if (isClimb && !Isjump && !isCrouched) 
             {
 
-
                 if (Input.GetKey(KeyCode.W))
                 {
                     isClimbing = true;
@@ -261,10 +237,10 @@ public class MainPlayerController : MonoBehaviour
                 {
 
                     anim.SetBool("IsClimb", false);
-                    charController.height = 1.86f;
+                    //charController.height = 1.86f;
                     //charController.height = _startHeightChara;
                     //charController.height = _startHeightChara;
-
+                    //charController.center = new Vector3(0, 0.64f, 0);
                     //_heightChara = charController.height;
                     anim.SetBool("IsHang", true);
 
@@ -284,11 +260,14 @@ public class MainPlayerController : MonoBehaviour
             }
 
 
+
+
         }
     }
 
     private void CrounchedInput()
     {
+        
         if (Input.GetKeyDown(KeyCode.C) && !Isjump)
         {
             Debug.Log("num = " + num);
@@ -352,6 +331,8 @@ public class MainPlayerController : MonoBehaviour
 
     }
 
+
+
     //bool isTrunRight;
     //private void RotationChar()
     //{
@@ -371,22 +352,28 @@ public class MainPlayerController : MonoBehaviour
     //    scalePlayer.transform.localScale = scaleP;
     //}
 
-    //public void OnTriggerEnter(Collider other)
-    //{
-    //    //if (other.gameObject.tag == "Ladder")
-    //    //{
-    //    //    labber.transform.position = other.transform.position;
-    //    //}
+    public void OnTriggerEnter(Collider other)
+    {
+        //if (other.gameObject.tag == "Ladder")
+        //{
+        //    labber.transform.position = other.transform.position;
+        //}
 
-    //    //if(other.gameObject.tag== "Hang to crouch")
-    //    //{
-    //    //    GameManager.IsInputEnabled = false;
-    //    //    anim.SetBool("Hang to crouch",true);
-    //    //}
+        //if(other.gameObject.tag== "Hang to crouch")
+        //{
+        //    GameManager.IsInputEnabled = false;
+        //    anim.SetBool("Hang to crouch",true);
+        //}
 
+        if (other.gameObject.tag == "Getup")
+        {
+            transform.Translate(Vector3.right * 2);
+            anim.SetBool("IsClimb", false);
+            
+            Debug.Log("can get up");
+        }
 
-
-    //}
+    }
 
     public void OnTriggerStay(Collider other)
     {
@@ -408,6 +395,15 @@ public class MainPlayerController : MonoBehaviour
         anim.SetBool("IsClimb", false);
         gravityScale = 3;
         anim.SetBool("IsHang", false);
+        closeWay[0].SetActive(false);
+        closeWay[1].SetActive(true);
+        //GameObject[] gameObj;
+        //gameObj = GameObject.FindGameObjectsWithTag("Getup");
+        //if (gameObj.Length == 1)
+        //{
+        //    gameObj[0].SetActive(false);
+        //    Debug.Log("find get up obj");
+        //}
         //GameManager.IsInputEnabled = true;
         //anim.SetBool("Hang to crouch", false);
 
