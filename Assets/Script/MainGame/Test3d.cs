@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainPlayerController : MonoBehaviour
+public class Test3d : MonoBehaviour
 {
-    public static MainPlayerController instance;
+   
     [Header("PlayerMovement")]
     public float _moveSpeedCurrent;
     public float _startMoveSpeed;
@@ -40,6 +40,7 @@ public class MainPlayerController : MonoBehaviour
     public GameObject rayMark;
     //public Transform distanceGround;
     public float distanceGround;
+    private Vector3 rotation;
 
 
 
@@ -48,7 +49,7 @@ public class MainPlayerController : MonoBehaviour
     private Vector3 moveDirection_C;
     public bool Isjump = false;
     public Vector3 _centerCharacter;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -64,26 +65,16 @@ public class MainPlayerController : MonoBehaviour
         _startMoveSpeed = _moveSpeedCurrent;
         closeWay[1].SetActive(false);
         _centerCharacter = charController.center;
-        
+
     }
-    private void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
-    }
+   
 
     // Update is called once per frame
     void Update()
     {
         Debug.Log("move" + _moveSpeedCurrent);
         Debug.Log("start" + _startMoveSpeed);
-        
+
 
         if (GameManager.IsInputEnabled)
         {
@@ -92,7 +83,7 @@ public class MainPlayerController : MonoBehaviour
             //float hMove = Input.GetAxis("Horizontal");
             //float VMove = Input.GetAxis("Vertical");
 
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, 0/* Input.GetAxis("Vertical")*/);
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             moveDirection.Normalize();
             moveDirection = moveDirection * _moveSpeedCurrent;
             moveDirection.y = yStore;
@@ -102,7 +93,7 @@ public class MainPlayerController : MonoBehaviour
             if (charController.isGrounded)
             {
                 JumpInput();
-
+                
 
             }
             else
@@ -111,7 +102,7 @@ public class MainPlayerController : MonoBehaviour
             }
             //Climb
 
-           
+
 
             CrounchedInput();
             if (isCrouched)
@@ -148,12 +139,16 @@ public class MainPlayerController : MonoBehaviour
             }
 
             CheckCeilie();
-           
+
 
 
             //rotation
             //RotationChar();
-            transform.right = Vector3.Slerp(transform.right, Vector3.right * Input.GetAxis("Horizontal"), 0.1f);
+            //transform.right = Vector3.Slerp(transform.right, Vector3.right * Input.GetAxis("Horizontal"), 0.1f);
+            //if (moveDirection != Vector3.zero)
+            //    transform.rotation = Quaternion.LookRotation(moveDirection);
+           
+
 
             moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
 
@@ -163,11 +158,12 @@ public class MainPlayerController : MonoBehaviour
 
 
             anim.SetBool("isGrounded", charController.isGrounded);
-            anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal")))/*+ Mathf.Abs(Input.GetAxis("Vertical"))*/);
+            //anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal")))/*+ Mathf.Abs(Input.GetAxis("Vertical"))*/);
+            anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))) + Mathf.Abs(Input.GetAxis("Vertical")));
 
             //CheckGround();
             //CheckBox();
-           
+
 
 
         }
@@ -176,7 +172,7 @@ public class MainPlayerController : MonoBehaviour
     {
         if (GameManager.IsInputEnabled)
         {
-            
+
             //checkGround while jump
             if (!Physics.Raycast(rayMark.transform.position, Vector3.down, distanceGround + 0.1f))
             {
@@ -198,7 +194,7 @@ public class MainPlayerController : MonoBehaviour
 
             //climb
 
-            if (isClimb && !Isjump && !isCrouched) 
+            if (isClimb && !Isjump && !isCrouched)
             {
 
                 if (Input.GetKey(KeyCode.W))
@@ -269,7 +265,7 @@ public class MainPlayerController : MonoBehaviour
 
     private void CrounchedInput()
     {
-        
+
         if (Input.GetKeyDown(KeyCode.C) && !Isjump)
         {
             Debug.Log("num = " + num);
@@ -316,6 +312,7 @@ public class MainPlayerController : MonoBehaviour
         {
 
             moveDirection.y = jumpForce;
+            
             _moveSpeedCurrent = 3;
             anim.SetBool("Jump", true);
             Isjump = true;
@@ -371,7 +368,7 @@ public class MainPlayerController : MonoBehaviour
         {
             transform.Translate(Vector3.right * 2);
             anim.SetBool("IsClimb", false);
-            
+
             Debug.Log("can get up");
         }
 
@@ -445,7 +442,7 @@ public class MainPlayerController : MonoBehaviour
     public void CheckCeilie()
     {
         RaycastHit hit;
-        
+
         Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
         if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
         {
@@ -461,7 +458,7 @@ public class MainPlayerController : MonoBehaviour
                     anim.SetBool("IsStartCrouched", false);
                 }
             }
-            hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
+            //hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
             Debug.Log("i've hit somthing");
         }
     }
@@ -470,4 +467,6 @@ public class MainPlayerController : MonoBehaviour
 
 
     
+
+
 
