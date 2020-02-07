@@ -6,7 +6,8 @@ public class AiFindPlayer : MonoBehaviour
 {
     //public float rotationSpeed;
     public float distance;
- 
+    private bool spawnCase = false;
+    private bool findTarget;
 
     // Start is called before the first frame update
     void Start()
@@ -19,28 +20,44 @@ public class AiFindPlayer : MonoBehaviour
     {
         //RaycastHit hit;
         //Vector3 direction = transform.TransformDirection(Vector3.forward) * 10;
-      
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, distance)) 
+        if (GameManager.gameEnd == false) 
         {
-            if (hitInfo.collider.CompareTag("Player")) 
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit hitInfo;
+            if (Physics.Raycast(ray, out hitInfo, distance))
+            {
+                if (hitInfo.collider.CompareTag("Player"))
+                {
+
+                    StartCoroutine(WaitForTureOff());
+                    GameManager.gameEnd = true;
+                    MainPlayerController.instance.anim.SetBool("IsDead", true);
+                    Debug.Log(hitInfo.collider.gameObject.name);
+                    Debug.Log("PlayerDead");
+                    spawnCase = true;
+                    //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+                }
+
+                else
+                {
+                    Debug.Log("Not found anything");
+                }
+                Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
+
+            }
+        }
+        else
+        {
+            if (spawnCase)
             {
                 distance = 0f;
-                StartCoroutine(WaitForTureOff());
-                GameManager.gameEnd = true;
-                MainPlayerController.instance.anim.SetBool("IsDead", true);
-                Debug.Log(hitInfo.collider.gameObject.name);
-                Debug.Log("PlayerDead");
+                StartCoroutine(WaitLoadScene());
+                spawnCase = false;
             }
-           
-            else
-            {
-                Debug.Log("Not found anything");
-            }
-            Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
 
         }
+
+       
         //soundManager.PlaySound(SoundManager.soundInGame.em_sound);
     }
     public void FixedUpdate()
@@ -58,10 +75,17 @@ public class AiFindPlayer : MonoBehaviour
 
     IEnumerator WaitForTureOff()
     {
-       
+        //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
         SoundManager.soundManager.audioS.volume = 0.3f;
         SoundManager.soundManager.PlaySound(soundInGame.em_sound);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
         SoundManager.soundManager.audioS.volume = 0f;
+    }
+
+    IEnumerator WaitLoadScene()
+    {
+        Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(3f);
+        GameManager._GameManager.LoadScene();
     }
 }

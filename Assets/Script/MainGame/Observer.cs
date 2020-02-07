@@ -8,29 +8,54 @@ public class Observer : MonoBehaviour
 
     bool isPlayerInRange;
     bool isDead;
+    private bool spawnCase = false;
+    public Collider collider;
+
+    public Animator anim;
     // Start is called before the first frame update
     void Start()
     {
-        
+     
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isPlayerInRange)
+        if (GameManager.IsInputEnabled)
         {
-            Vector3 direction = player.position - transform.position + Vector3.forward;
-            Ray ray = new Ray(transform.position, direction);
-            RaycastHit raycastHit;
-            //Debug.DrawLine(ray.origin, ray, Color.red);
-            if (Physics.Raycast(ray,out raycastHit))
+            if (isPlayerInRange)
             {
-                Debug.Log("HitPlaye");
-                GameManager.gameEnd = true;
-                MainPlayerController.instance.anim.SetBool("IsDead", true);
-                GameManager.IsInputEnabled = false;
+                Vector3 direction = player.position - transform.position + Vector3.forward;
+                Ray ray = new Ray(transform.position, direction);
+                RaycastHit raycastHit;
+                //Debug.DrawLine(ray.origin, ray, Color.red);
+                if (Physics.Raycast(ray, out raycastHit))
+                {
+                    collider.enabled = true;
+
+                    StartCoroutine(WaitForTureOff());
+                    Debug.Log("HitPlaye");
+                    GameManager.gameEnd = true;
+                    MainPlayerController.instance.anim.SetBool("IsDead", true);
+
+                    GameManager.IsInputEnabled = false;
+                    spawnCase = true;
+
+
+                }
             }
         }
+        else
+        {
+            if (spawnCase)
+            {
+                collider.enabled = false;
+                StartCoroutine(WaitLoadScene());
+                spawnCase = false;
+            }
+
+        }
+
     }
 
     void OnTriggerEnter(Collider other)
@@ -47,5 +72,23 @@ public class Observer : MonoBehaviour
         {
             isPlayerInRange = false;
         }
+    }
+
+    IEnumerator WaitForTureOff()
+    {
+        anim.speed = 0;
+        //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+        SoundManager.soundManager.audioS.volume = 0.3f;
+        SoundManager.soundManager.PlaySound(soundInGame.em_sound);
+        yield return new WaitForSeconds(5f);
+        SoundManager.soundManager.audioS.volume = 0f;
+    }
+
+    IEnumerator WaitLoadScene()
+    {
+        
+        Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(3f);
+        GameManager._GameManager.LoadScene();
     }
 }

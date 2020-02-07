@@ -5,14 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
+    public static GameManager _GameManager;
     public static bool IsInputEnabled = true;
     public static bool gameEnd = false;
+    public  GameObject caseModel;
+
     //public static bool isChagn;
 
     // Start is called before the first frame update
     void Start()
     {
+        IsInputEnabled = true;
+        gameEnd = false;
+    }
+    private void Awake()
+    {
+        if (_GameManager == null)
+        {
+            _GameManager = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
         
     }
 
@@ -38,5 +53,13 @@ public class GameManager : MonoBehaviour
         //    isChagn = true;
         //    SceneManager.LoadScene("TestCameraFollow2");
         //}
+    }
+
+    public void LoadScene()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        // load the same scene
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 }
