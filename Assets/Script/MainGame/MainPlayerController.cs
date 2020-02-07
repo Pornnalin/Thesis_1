@@ -83,9 +83,9 @@ public class MainPlayerController : MonoBehaviour
     {
         Debug.Log("move" + _moveSpeedCurrent);
         Debug.Log("start" + _startMoveSpeed);
-        
 
-        if (GameManager.IsInputEnabled)
+
+        if (GameManager.IsInputEnabled && !GameManager.gameEnd) 
         {
 
             float yStore = moveDirection.y;
@@ -444,26 +444,30 @@ public class MainPlayerController : MonoBehaviour
     }
     public void CheckCeilie()
     {
-        RaycastHit hit;
-        
-        Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
-        if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
+        if (isCrouched)
         {
-            if (hit.collider.gameObject.CompareTag("Ceiling"))
+            RaycastHit hit;
+
+            Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
+            if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
             {
-                num = 0;
-                Debug.Log("hitCeiling");
-            }
-            else
-            {
-                if (Input.GetKeyUp(KeyCode.C))
+                if (hit.collider.gameObject.CompareTag("Ceiling"))
                 {
-                    anim.SetBool("IsStartCrouched", false);
+                    num = 0;
+                    Debug.Log("hitCeiling");
                 }
+                else
+                {
+                    if (Input.GetKeyUp(KeyCode.C))
+                    {
+                        anim.SetBool("IsStartCrouched", false);
+                    }
+                }
+                hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
+                Debug.Log("i've hit somthing");
             }
-            hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
-            Debug.Log("i've hit somthing");
         }
+       
     }
 }
 

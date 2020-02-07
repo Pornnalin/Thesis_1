@@ -19,7 +19,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (gameEnd == true) 
+        {
+            UIManager.iManager.endGameTxt.enabled = true;
+            IsInputEnabled = false;
+            //MainPlayerController.instance.anim.SetFloat("Speed", 0f);
+        }
+        else
+        {
+            UIManager.iManager.endGameTxt.enabled = false;
+            IsInputEnabled = true;
+        }
     }
     public void OnTriggerEnter(Collider other)
     {

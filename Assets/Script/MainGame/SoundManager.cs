@@ -1,20 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
+[RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
-
     public static SoundManager soundManager;
+    [HideInInspector]
     public AudioSource audioS;
-    public AudioClip em, walk;
+    public AudioClip em;
 
 
-    public enum soundInGame
-    {
-        em_sound, walk
-    }
-
+    
     public void Awake()
     {
         if (soundManager == null)
@@ -45,8 +43,13 @@ public class SoundManager : MonoBehaviour
         switch (sound)
         {
             case soundInGame.em_sound:
+                //audioS.volume = 1f;
                 audioS.PlayOneShot(em);
                     break;
         }
     }
+}
+public enum soundInGame
+{
+    em_sound
 }

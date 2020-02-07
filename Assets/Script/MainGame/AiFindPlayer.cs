@@ -6,6 +6,7 @@ public class AiFindPlayer : MonoBehaviour
 {
     //public float rotationSpeed;
     public float distance;
+ 
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,10 @@ public class AiFindPlayer : MonoBehaviour
         {
             if (hitInfo.collider.CompareTag("Player")) 
             {
+                distance = 0f;
+                StartCoroutine(WaitForTureOff());
+                GameManager.gameEnd = true;
+                MainPlayerController.instance.anim.SetBool("IsDead", true);
                 Debug.Log(hitInfo.collider.gameObject.name);
                 Debug.Log("PlayerDead");
             }
@@ -36,7 +41,7 @@ public class AiFindPlayer : MonoBehaviour
             Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
 
         }
-
+        //soundManager.PlaySound(SoundManager.soundInGame.em_sound);
     }
     public void FixedUpdate()
     {
@@ -49,5 +54,14 @@ public class AiFindPlayer : MonoBehaviour
           
 
         //Debug.DrawRay(transform.position, direction, Color.green);
+    }
+
+    IEnumerator WaitForTureOff()
+    {
+       
+        SoundManager.soundManager.audioS.volume = 0.3f;
+        SoundManager.soundManager.PlaySound(soundInGame.em_sound);
+        yield return new WaitForSeconds(4f);
+        SoundManager.soundManager.audioS.volume = 0f;
     }
 }

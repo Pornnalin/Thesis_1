@@ -26,7 +26,7 @@ public class Observer : MonoBehaviour
             if (Physics.Raycast(ray,out raycastHit))
             {
                 Debug.Log("HitPlaye");
-                
+                GameManager.gameEnd = true;
                 MainPlayerController.instance.anim.SetBool("IsDead", true);
                 GameManager.IsInputEnabled = false;
             }

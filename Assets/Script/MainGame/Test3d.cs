@@ -49,6 +49,7 @@ public class Test3d : MonoBehaviour
     private Vector3 moveDirection_C;
     public bool Isjump = false;
     public Vector3 _centerCharacter;
+    public CameraControl camera;
 
 
     // Start is called before the first frame update
@@ -63,8 +64,8 @@ public class Test3d : MonoBehaviour
         //charController.height = 1.78f;
         //_colliderCha = GetComponent<Collider>();
         _startMoveSpeed = _moveSpeedCurrent;
-        closeWay[1].SetActive(false);
-        _centerCharacter = charController.center;
+  
+        charController.center = new Vector3(0, 0.989f, 0);
 
     }
    
@@ -78,94 +79,174 @@ public class Test3d : MonoBehaviour
 
         if (GameManager.IsInputEnabled)
         {
-
-            float yStore = moveDirection.y;
-            //float hMove = Input.GetAxis("Horizontal");
-            //float VMove = Input.GetAxis("Vertical");
-
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            moveDirection.Normalize();
-            moveDirection = moveDirection * _moveSpeedCurrent;
-            moveDirection.y = yStore;
-
-
-            //jump
-            if (charController.isGrounded)
+            if (camera.switchInput == false)
             {
-                JumpInput();
+
+
+                float yStore = moveDirection.y;
+                //float hMove = Input.GetAxis("Horizontal");
+                //float VMove = Input.GetAxis("Vertical");
+
+                moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                moveDirection.Normalize();
+                moveDirection = moveDirection * _moveSpeedCurrent;
+                moveDirection.y = yStore;
+
+                transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+                Quaternion newRotation = Quaternion.LookRotation(new Vector3(moveDirection.x, 0f, moveDirection.z));
+               
+                playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation, newRotation, 10f * Time.deltaTime);
+
+                //jump
+                if (charController.isGrounded)
+                {
+                    JumpInput();
+
+
+                }
+                else
+                {
+
+                }
+                //Climb
+
+
+
+                CrounchedInput();
+                if (isCrouched)
+                {
+
+                    _moveSpeedCurrent = 1f;
+
+                    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                    mycc.height = 1.24f;
+                    mycc.center = new Vector3(0, 0.62f, 0);
+
+                    CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                    cc.height = 1.25f;
+                    cc.center = new Vector3(0, 0.64f, 0);
+                  
+
+
+
+                }
+                else
+                {
+
+                    isCrouched = false;
+                    _moveSpeedCurrent = _startMoveSpeed;
+                    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                    mycc.height = 1.78f;
+                    mycc.center = new Vector3(0, 0.94f, 0);
+
+
+                    CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                    cc.height = 1.86f;
+                    cc.center = new Vector3(0, 0.989f, 0);
+                  
+                }
+
+                CheckCeilie();
+                
+                moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
+
+
+                charController.Move(moveDirection * Time.deltaTime);
+
+
+
+                anim.SetBool("isGrounded", charController.isGrounded);
+                
+                anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))) + Mathf.Abs(Input.GetAxis("Vertical")));
+
+               
+
+
+            }
+
+            else
+            {
+                float yStore = moveDirection.y;
+                //float hMove = Input.GetAxis("Horizontal");
+                //float VMove = Input.GetAxis("Vertical");
+
+                moveDirection = new Vector3(-Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
+                moveDirection.Normalize();
+                moveDirection = moveDirection * _moveSpeedCurrent;
+                moveDirection.y = yStore;
+
+                transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+                Quaternion newRotation = Quaternion.LookRotation(new Vector3(moveDirection.x, 0f, moveDirection.z));
                 
 
+                playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation, newRotation, 10f * Time.deltaTime);
+
+                //jump
+                if (charController.isGrounded)
+                {
+                    JumpInput();
+
+
+                }
+                else
+                {
+
+                }
+               
+
+                CrounchedInput();
+                if (isCrouched)
+                {
+
+                    _moveSpeedCurrent = 1f;
+
+                    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                    mycc.height = 1.24f;
+                    mycc.center = new Vector3(0, 0.62f, 0);
+
+                    CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                    cc.height = 1.25f;
+                    cc.center = new Vector3(0, 0.64f, 0);
+                   
+
+
+                }
+                else
+                {
+
+                    isCrouched = false;
+                    _moveSpeedCurrent = _startMoveSpeed;
+                    CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                    mycc.height = 1.78f;
+                    mycc.center = new Vector3(0, 0.94f, 0);
+
+
+                    CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
+                    cc.height = 1.86f;
+                    cc.center = new Vector3(0, 0.989f, 0);
+                    //charController.center = _centerCharacter;
+                }
+
+                CheckCeilie();
+
+
+
+
+                moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
+
+
+                charController.Move(moveDirection * Time.deltaTime);
+
+
+
+                anim.SetBool("isGrounded", charController.isGrounded);
+               
+                anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))) + Mathf.Abs(Input.GetAxis("Vertical")));
+
+              
+
+
             }
-            else
-            {
-
-            }
-            //Climb
-
-
-
-            CrounchedInput();
-            if (isCrouched)
-            {
-
-                _moveSpeedCurrent = 1f;
-
-                CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-                mycc.height = 1.24f;
-                mycc.center = new Vector3(0, 0.62f, 0);
-
-                CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
-                cc.height = 1.25f;
-                cc.center = new Vector3(0, 0.64f, 0);
-                //charController.height = 1.25f;
-
-
-
-            }
-            else
-            {
-
-                isCrouched = false;
-                _moveSpeedCurrent = _startMoveSpeed;
-                CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-                mycc.height = 1.78f;
-                mycc.center = new Vector3(0, 0.94f, 0);
-
-
-                CharacterController cc = GetComponent(typeof(CharacterController)) as CharacterController;
-                cc.height = 1.86f;
-                //cc.center = new Vector3(0, 0.96f, 0);
-                charController.center = _centerCharacter;
-            }
-
-            CheckCeilie();
-
-
-
-            //rotation
-            //RotationChar();
-            //transform.right = Vector3.Slerp(transform.right, Vector3.right * Input.GetAxis("Horizontal"), 0.1f);
-            //if (moveDirection != Vector3.zero)
-            //    transform.rotation = Quaternion.LookRotation(moveDirection);
-           
-
-
-            moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
-
-
-            charController.Move(moveDirection * Time.deltaTime);
-
-
-
-            anim.SetBool("isGrounded", charController.isGrounded);
-            //anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal")))/*+ Mathf.Abs(Input.GetAxis("Vertical"))*/);
-            anim.SetFloat("Speed", (Mathf.Abs(Input.GetAxis("Horizontal"))) + Mathf.Abs(Input.GetAxis("Vertical")));
-
-            //CheckGround();
-            //CheckBox();
-
-
-
         }
     }
     public void FixedUpdate()
@@ -201,32 +282,25 @@ public class Test3d : MonoBehaviour
                 {
                     isClimbing = true;
                     anim.SetBool("IsHang", false);
-                    //charController.height = 1.22f;
-                    //charController.center = new Vector3(0, 1.59f, 0);
+                   
                     gravityScale = 0;
                     transform.Translate(Vector3.up * Input.GetAxis("Vertical") * _speedCilmb * Time.deltaTime);
                     Debug.Log("up");
                     anim.SetBool("IsClimb", true);
 
-                    //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-                    //mycc.height = 1.35f;
-                    //mycc.center = new Vector3(0, 1.71f, 0);
+                   
                 }
 
                 else if (Input.GetKey(KeyCode.S))
                 {
                     isClimbing = true;
                     anim.SetBool("IsHang", false);
-                    //charController.height = 1.22f;
-                    //charController.center = new Vector3(0, 1.59f, 0);
-                    //gravityScale = 1;
+                   
                     transform.Translate(Vector3.up * Input.GetAxis("Vertical") * _speedCilmb * Time.deltaTime);
                     anim.SetBool("IsClimb", true);
                     Debug.Log("down");
 
-                    //CapsuleCollider mycc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
-                    //mycc.height = 1.35f;
-                    //mycc.center = new Vector3(0, 1.71f, 0);
+                    
 
                 }
 
@@ -235,11 +309,7 @@ public class Test3d : MonoBehaviour
                 {
 
                     anim.SetBool("IsClimb", false);
-                    //charController.height = 1.86f;
-                    //charController.height = _startHeightChara;
-                    //charController.height = _startHeightChara;
-                    //charController.center = new Vector3(0, 0.64f, 0);
-                    //_heightChara = charController.height;
+                   
                     anim.SetBool("IsHang", true);
 
 
@@ -250,11 +320,7 @@ public class Test3d : MonoBehaviour
             {
                 isClimbing = false;
                 anim.SetBool("IsClimb", false);
-                //charController.height = 1.86f;
-                //charController.height = _startHeightChara;
-                //charController.height = _startHeightChara;
-
-                //_heightChara = charController.height;
+               
             }
 
 
@@ -330,39 +396,12 @@ public class Test3d : MonoBehaviour
 
     }
 
+   
 
-
-    //bool isTrunRight;
-    //private void RotationChar()
-    //{
-    //    Vector3 scaleP = scalePlayer.transform.localScale;
-    //    float hMove = Input.GetAxis("Horizontal");
-
-    //    if (hMove < 0)
-    //    {
-    //        isTrunRight = false;
-    //        scaleP.z = -1;
-    //    }
-    //    if (hMove > 0)
-    //    {
-    //        isTrunRight = true;
-    //        scaleP.z = 1;
-    //    }
-    //    scalePlayer.transform.localScale = scaleP;
-    //}
 
     public void OnTriggerEnter(Collider other)
     {
-        //if (other.gameObject.tag == "Ladder")
-        //{
-        //    labber.transform.position = other.transform.position;
-        //}
-
-        //if(other.gameObject.tag== "Hang to crouch")
-        //{
-        //    GameManager.IsInputEnabled = false;
-        //    anim.SetBool("Hang to crouch",true);
-        //}
+        
 
         if (other.gameObject.tag == "Getup")
         {
@@ -381,8 +420,7 @@ public class Test3d : MonoBehaviour
             Debug.Log("ClimbAnimation");
             isClimb = true;
 
-            //moveDirection = new Vector3(0, Input.GetAxis("Vertical"), 0);
-            //anim.SetBool("IsClimb", true);
+           
         }
 
 
@@ -394,17 +432,8 @@ public class Test3d : MonoBehaviour
         anim.SetBool("IsClimb", false);
         gravityScale = 3;
         anim.SetBool("IsHang", false);
-        closeWay[0].SetActive(false);
-        closeWay[1].SetActive(true);
-        //GameObject[] gameObj;
-        //gameObj = GameObject.FindGameObjectsWithTag("Getup");
-        //if (gameObj.Length == 1)
-        //{
-        //    gameObj[0].SetActive(false);
-        //    Debug.Log("find get up obj");
-        //}
-        //GameManager.IsInputEnabled = true;
-        //anim.SetBool("Hang to crouch", false);
+     
+     
 
     }
     public void OnControllerColliderHit(ControllerColliderHit hit)
@@ -416,51 +445,29 @@ public class Test3d : MonoBehaviour
 
     }
 
-    public void CheckBox()
+    
+    public void CheckCeilie()
     {
+        //RaycastHit hit;
 
-        //Ray ray = new Ray(checkBox.transform.position, transform.right);
-        //RaycastHit hitInfo;
-        ////Debug.Log(ray);
-        //if (Physics.Raycast(ray, out hitInfo, 1, mask, QueryTriggerInteraction.Ignore))
+        ////Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
+        //if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
         //{
-        //    Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
-        //    print(hitInfo.collider.gameObject.tag);
-
-        //    if (hitInfo.collider.CompareTag("Ob_Box"))
+        //    if (hit.collider.gameObject.CompareTag("Ceiling"))
         //    {
-        //        isFoundBox = true;
-        //        Debug.Log("foundbox");
+        //        num = 0;
+        //        Debug.Log("hitCeiling");
         //    }
         //    else
         //    {
-        //        isFoundBox = false;
+        //        if (Input.GetKeyUp(KeyCode.C))
+        //        {
+        //            anim.SetBool("IsStartCrouched", false);
+        //        }
         //    }
-
+        //    //hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
+        //    Debug.Log("i've hit somthing");
         //}
-    }
-    public void CheckCeilie()
-    {
-        RaycastHit hit;
-
-        Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
-        if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
-        {
-            if (hit.collider.gameObject.CompareTag("Ceiling"))
-            {
-                num = 0;
-                Debug.Log("hitCeiling");
-            }
-            else
-            {
-                if (Input.GetKeyUp(KeyCode.C))
-                {
-                    anim.SetBool("IsStartCrouched", false);
-                }
-            }
-            //hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
-            Debug.Log("i've hit somthing");
-        }
     }
 }
 

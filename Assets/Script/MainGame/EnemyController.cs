@@ -79,5 +79,10 @@ public class EnemyController : MonoBehaviour
 
             }
         }
+
+        if (GameManager.gameEnd)
+        {
+            anim.SetBool("IsMoving", false);
+        }
     }
 }
