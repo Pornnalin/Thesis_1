@@ -29,12 +29,12 @@ public class AiFindPlayer : MonoBehaviour
                 if (hitInfo.collider.CompareTag("Player"))
                 {
 
-                    StartCoroutine(WaitForTureOff());
-                    GameManager.gameEnd = true;
-                    MainPlayerController.instance.anim.SetBool("IsDead", true);
+                    //StartCoroutine(WaitForTureOff());
+                    //GameManager.gameEnd = true;
+                    //MainPlayerController.instance.anim.SetBool("IsDead", true);
                     Debug.Log(hitInfo.collider.gameObject.name);
                     Debug.Log("PlayerDead");
-                    spawnCase = true;
+                    //spawnCase = true;
                     //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
                 }
 
