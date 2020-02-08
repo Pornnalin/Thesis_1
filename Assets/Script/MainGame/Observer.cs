@@ -9,13 +9,14 @@ public class Observer : MonoBehaviour
     bool isPlayerInRange;
     bool isDead;
     private bool spawnCase = false;
-    public Collider collider;
+    public Collider _collider;
+    
 
     public Animator anim;
     // Start is called before the first frame update
     void Start()
     {
-     
+        
     }
 
     // Update is called once per frame
@@ -31,7 +32,8 @@ public class Observer : MonoBehaviour
                 //Debug.DrawLine(ray.origin, ray, Color.red);
                 if (Physics.Raycast(ray, out raycastHit))
                 {
-                    collider.enabled = true;
+                    
+                    _collider.enabled = true;
 
                     StartCoroutine(WaitForTureOff());
                     Debug.Log("HitPlaye");
@@ -49,7 +51,10 @@ public class Observer : MonoBehaviour
         {
             if (spawnCase)
             {
-                collider.enabled = false;
+               
+                _collider.enabled = false;
+                CapsuleCollider cc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+                cc.isTrigger = false;
                 StartCoroutine(WaitLoadScene());
                 spawnCase = false;
             }
@@ -88,7 +93,11 @@ public class Observer : MonoBehaviour
     {
         
         Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(7f);
         GameManager._GameManager.LoadScene();
     }
+
+   
+
+  
 }
