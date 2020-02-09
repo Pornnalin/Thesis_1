@@ -26,6 +26,8 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         waitCounter = waitAtPoint;
+       
+        agent.baseOffset = -0.1f;
     }
 
     // Update is called once per frame
