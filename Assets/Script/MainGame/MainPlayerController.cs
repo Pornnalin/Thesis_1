@@ -148,8 +148,8 @@ public class MainPlayerController : MonoBehaviour
                 charController.center = _centerCharacter;
             }
 
-            CheckCeilie();
-           
+            //CheckCeilie();
+
 
 
             //rotation
@@ -294,10 +294,36 @@ public class MainPlayerController : MonoBehaviour
         if (num >= 2)
         {
 
-            num = 0;
-            isCrouched = false;
-            isStartCrouched = false;
-            anim.SetBool("IsStartCrouched", false);
+            //num = 0;
+            RaycastHit hit;
+
+            Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
+            if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
+            {
+                if (hit.collider.gameObject.CompareTag("Ceiling"))
+                {
+                    num = 0;
+                    Debug.Log("hitCeiling");
+                }
+                else
+                {
+                    if (Input.GetKeyUp(KeyCode.C))
+                    {
+                        anim.SetBool("IsStartCrouched", false);
+                    }
+                }
+                //hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
+                Debug.Log("i've hit somthing");
+            }
+            else
+            {
+                num = 0;
+                isCrouched = false;
+                isStartCrouched = false;
+                anim.SetBool("IsStartCrouched", false);
+            }
+            
+            
 
         }
         else
@@ -443,33 +469,33 @@ public class MainPlayerController : MonoBehaviour
 
         //}
     }
-    public void CheckCeilie()
-    {
-        if (isCrouched)
-        {
-            RaycastHit hit;
+    //public void CheckCeilie()
+    //{
+    //    //if (isCrouched)
+    //    //{
+    //        RaycastHit hit;
 
-            Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
-            if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
-            {
-                if (hit.collider.gameObject.CompareTag("Ceiling"))
-                {
-                    num = 0;
-                    Debug.Log("hitCeiling");
-                }
-                else
-                {
-                    if (Input.GetKeyUp(KeyCode.C))
-                    {
-                        anim.SetBool("IsStartCrouched", false);
-                    }
-                }
-                hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
-                Debug.Log("i've hit somthing");
-            }
-        }
+    //        Debug.DrawRay(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up) * 10f, Color.green);
+    //        if (Physics.Raycast(_checkCeilie.transform.position, transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity))
+    //        {
+    //            if (hit.collider.gameObject.CompareTag("Ceiling"))
+    //            {
+    //                num = 0;
+    //                Debug.Log("hitCeiling");
+    //            }
+    //            else
+    //            {
+    //                if (Input.GetKeyUp(KeyCode.C))
+    //                {
+    //                    anim.SetBool("IsStartCrouched", false);
+    //                }
+    //            }
+    //            //hit.collider.gameObject.GetComponent<ChangeColor>().BeenHit();
+    //            Debug.Log("i've hit somthing");
+    //        }
+    //    //}
        
-    }
+    //}
 }
 
 

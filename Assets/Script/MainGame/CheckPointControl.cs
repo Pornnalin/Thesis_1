@@ -20,7 +20,7 @@ public class CheckPointControl : MonoBehaviour
             Destroy(gameObject);
         }
 
-        
+       
         
     }
 
