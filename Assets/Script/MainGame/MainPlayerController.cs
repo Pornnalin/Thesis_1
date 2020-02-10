@@ -5,6 +5,7 @@ using UnityEngine;
 public class MainPlayerController : MonoBehaviour
 {
     public static MainPlayerController instance;
+    private CheckPointControl checkPointControl;
     [Header("PlayerMovement")]
     public float _moveSpeedCurrent;
     public float _startMoveSpeed;
@@ -58,13 +59,13 @@ public class MainPlayerController : MonoBehaviour
         distanceGround = GetComponent<Collider>().bounds.extents.y;
         anim.SetBool("Jump", false);
         current = transform.position;
-        //rigidbody = GetComponent<Rigidbody>();
-        //charController.height = 1.78f;
-        //_colliderCha = GetComponent<Collider>();
         _startMoveSpeed = _moveSpeedCurrent;
         closeWay[1].SetActive(false);
         _centerCharacter = charController.center;
-        
+
+        checkPointControl = GameObject.FindGameObjectWithTag("CPC").GetComponent<CheckPointControl>();
+        transform.position = checkPointControl.lastCheckPos;
+
     }
     private void Awake()
     {
@@ -83,7 +84,7 @@ public class MainPlayerController : MonoBehaviour
     {
         Debug.Log("move" + _moveSpeedCurrent);
         Debug.Log("start" + _startMoveSpeed);
-
+       
 
         if (GameManager.IsInputEnabled && !GameManager.gameEnd) 
         {

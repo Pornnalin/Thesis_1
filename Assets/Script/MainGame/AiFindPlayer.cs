@@ -12,7 +12,7 @@ public class AiFindPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        findTarget = true;
     }
 
     // Update is called once per frame
@@ -20,7 +20,7 @@ public class AiFindPlayer : MonoBehaviour
     {
         //RaycastHit hit;
         //Vector3 direction = transform.TransformDirection(Vector3.forward) * 10;
-        if (GameManager.gameEnd == false) 
+        if (GameManager.IsInputEnabled && findTarget)  
         {
             Ray ray = new Ray(transform.position, transform.forward);
             RaycastHit hitInfo;
@@ -30,11 +30,13 @@ public class AiFindPlayer : MonoBehaviour
                 {
 
                     //StartCoroutine(WaitForTureOff());
-                    //GameManager.gameEnd = true;
-                    //MainPlayerController.instance.anim.SetBool("IsDead", true);
+                    //GameManager.gameEnd = true;     
+                    StartCoroutine(WaitForTurnOff());
+                    MainPlayerController.instance.anim.SetBool("IsDead", true);
                     Debug.Log(hitInfo.collider.gameObject.name);
                     Debug.Log("PlayerDead");
-                    //spawnCase = true;
+                    spawnCase = true;
+                    GameManager.gameEnd = true;
                     //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
                 }
 
@@ -48,10 +50,10 @@ public class AiFindPlayer : MonoBehaviour
         }
         else
         {
+            findTarget = false;
             if (spawnCase)
             {
                 distance = 0f;
-                StartCoroutine(WaitLoadScene());
                 spawnCase = false;
             }
 
@@ -73,19 +75,20 @@ public class AiFindPlayer : MonoBehaviour
         //Debug.DrawRay(transform.position, direction, Color.green);
     }
 
-    IEnumerator WaitForTureOff()
-    {
-        //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
-        SoundManager.soundManager.audioS.volume = 0.3f;
-        SoundManager.soundManager.PlaySound(soundInGame.em_sound);
-        yield return new WaitForSeconds(5f);
-        SoundManager.soundManager.audioS.volume = 0f;
-    }
-
-    IEnumerator WaitLoadScene()
+    IEnumerator WaitForTurnOff()
     {
         Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+        SoundManager.soundManager.audioS.volume = 0.3f;
+        SoundManager.soundManager.PlaySound(soundInGame.em_sound);
         yield return new WaitForSeconds(3f);
-        GameManager._GameManager.LoadScene();
+        SoundManager.soundManager.audioS.volume = 0f;
+        UIManager.iManager.EndGame();
     }
+
+    //IEnumerator WaitLoadScene()
+    //{
+    //    Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+    //    yield return new WaitForSeconds(3f);
+      
+    //}
 }

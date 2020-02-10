@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
     public static bool IsInputEnabled = true;
     public static bool gameEnd = false;
     public  GameObject caseModel;
+   
 
     //public static bool isChagn;
 
@@ -37,13 +39,15 @@ public class GameManager : MonoBehaviour
     {
         if (gameEnd == true) 
         {
-            UIManager.iManager.endGameTxt.enabled = true;
+            //UIManager.iManager.endGameTxt.enabled = true;
             IsInputEnabled = false;
+            
             //MainPlayerController.instance.anim.SetFloat("Speed", 0f);
+            
         }
         else
         {
-            UIManager.iManager.endGameTxt.enabled = false;
+            //UIManager.iManager.endGameTxt.enabled = false;
             IsInputEnabled = true;
         }
     }
@@ -56,11 +60,8 @@ public class GameManager : MonoBehaviour
         //}
     }
 
-    public void LoadScene()
-    {
-        string sceneName = SceneManager.GetActiveScene().name;
+  
+    
 
-        // load the same scene
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-    }
+
 }

@@ -35,11 +35,10 @@ public class Observer : MonoBehaviour
                     
                     _collider.enabled = true;
 
-                    StartCoroutine(WaitForTureOff());
+                    StartCoroutine(WaitForTurnOff());
                     Debug.Log("HitPlaye");
                     GameManager.gameEnd = true;
                     MainPlayerController.instance.anim.SetBool("IsDead", true);
-
                     GameManager.IsInputEnabled = false;
                     spawnCase = true;
 
@@ -55,7 +54,7 @@ public class Observer : MonoBehaviour
                 _collider.enabled = false;
                 CapsuleCollider cc = GetComponent(typeof(CapsuleCollider)) as CapsuleCollider;
                 cc.isTrigger = false;
-                StartCoroutine(WaitLoadScene());
+                
                 spawnCase = false;
             }
 
@@ -79,25 +78,31 @@ public class Observer : MonoBehaviour
         }
     }
 
-    IEnumerator WaitForTureOff()
+    IEnumerator WaitForTurnOff()
     {
         anim.speed = 0;
-        //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+        Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
         SoundManager.soundManager.audioS.volume = 0.3f;
         SoundManager.soundManager.PlaySound(soundInGame.em_sound);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         SoundManager.soundManager.audioS.volume = 0f;
-    }
-
-    IEnumerator WaitLoadScene()
-    {
+        UIManager.iManager.EndGame();
+       
         
-        Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
-        yield return new WaitForSeconds(7f);
-        GameManager._GameManager.LoadScene();
+
+
+
     }
 
-   
+    //IEnumerator WaitLoadScene()
+    //{
 
-  
+    //    Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+    //    yield return new WaitForSeconds(7f);
+    //    UIManager.iManager.EndGame();
+    //}
+
+
+
+
 }
