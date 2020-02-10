@@ -81,7 +81,7 @@ public class Observer : MonoBehaviour
     IEnumerator WaitForTurnOff()
     {
         anim.speed = 0;
-        Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+        Instantiate(MainPlayerController.instance.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
         SoundManager.soundManager.audioS.volume = 0.3f;
         SoundManager.soundManager.PlaySound(soundInGame.em_sound);
         yield return new WaitForSeconds(3f);

@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager _GameManager;
     public static bool IsInputEnabled = true;
     public static bool gameEnd = false;
-    public  GameObject caseModel;
+    
    
 
     //public static bool isChagn;

@@ -6,6 +6,7 @@ public class MainPlayerController : MonoBehaviour
 {
     public static MainPlayerController instance;
     private CheckPointControl checkPointControl;
+    public GameObject caseModel;
     [Header("PlayerMovement")]
     public float _moveSpeedCurrent;
     public float _startMoveSpeed;
@@ -393,6 +394,7 @@ public class MainPlayerController : MonoBehaviour
         //    GameManager.IsInputEnabled = false;
         //    anim.SetBool("Hang to crouch",true);
         //}
+        
 
         if (other.gameObject.tag == "Getup")
         {
