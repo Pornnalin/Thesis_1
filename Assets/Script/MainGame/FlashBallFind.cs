@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AiFindPlayer : MonoBehaviour
+public class FlashBallFind : MonoBehaviour
 {
-    //public float rotationSpeed;
+    // Start is called before the first frame update
     public float distance;
     private bool spawnCase = false;
     private bool findTarget;
@@ -20,29 +20,28 @@ public class AiFindPlayer : MonoBehaviour
     {
         //RaycastHit hit;
         //Vector3 direction = transform.TransformDirection(Vector3.forward) * 10;
-        if (GameManager.IsInputEnabled && findTarget)  
+        if (GameManager.IsInputEnabled && findTarget)
         {
-            Ray ray = new Ray(transform.position, transform.forward);
+            Ray ray = new Ray(transform.position, -transform.up);
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, distance))
             {
                 if (hitInfo.collider.CompareTag("Player"))
                 {
 
-                    StartCoroutine(WaitForTurnOff());
-                    //GameManager.gameEnd = true;     
+                       
                     StartCoroutine(WaitForTurnOff());
                     MainPlayerController.instance.anim.SetBool("IsDead", true);
                     Debug.Log(hitInfo.collider.gameObject.name);
-                    Debug.Log("PlayerDead");
+                    Debug.Log("PlayerDead2");
                     spawnCase = true;
                     GameManager.gameEnd = true;
-                    //Instantiate(GameManager._GameManager.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+                  
                 }
 
                 else
                 {
-                    Debug.Log("Not found anything");
+                    Debug.Log("Not found anything2");
                 }
                 Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
 
@@ -60,25 +59,14 @@ public class AiFindPlayer : MonoBehaviour
 
         }
 
-       
-        //soundManager.PlaySound(SoundManager.soundInGame.em_sound);
-    }
-    public void FixedUpdate()
-    {
-        //Vector3 direction = transform.TransformDirection(Vector3.forward) * 10;
-        //if (Physics.Raycast(transform.position, direction, 10))
-        //{
-        //    print("There is something in front of the object!");
-        //    Debug.Log(gameObject.name);
-        //}
-          
 
-        //Debug.DrawRay(transform.position, direction, Color.green);
+        
     }
+    
 
     IEnumerator WaitForTurnOff()
     {
-        //Instantiate(MainPlayerController.instance.caseModel, MainPlayerController.instance.playerModel.transform.position, Quaternion.identity);
+        
         SoundManager.soundManager.audioS.volume = 0.3f;
         SoundManager.soundManager.PlaySound(soundInGame.em_sound);
         yield return new WaitForSeconds(3f);
@@ -92,4 +80,7 @@ public class AiFindPlayer : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
     }
+
 }
+
+

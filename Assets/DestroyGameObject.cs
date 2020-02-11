@@ -5,6 +5,7 @@ using UnityEngine;
 public class DestroyGameObject : MonoBehaviour
 {
     public GameObject FB;
+    public float countTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +27,7 @@ public class DestroyGameObject : MonoBehaviour
     {
         if (other.gameObject.tag == "FB")
         {
-            Destroy(FB,2f);
+            Destroy(FB, countTime);
             
         }
     }
