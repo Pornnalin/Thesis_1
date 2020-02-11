@@ -86,7 +86,7 @@ public class Observer : MonoBehaviour
         SoundManager.soundManager.PlaySound(soundInGame.em_sound);
         yield return new WaitForSeconds(3f);
         SoundManager.soundManager.audioS.volume = 0f;
-        UIManager.iManager.EndGame();
+        TrasitionScene.Trasition.EndGame();
        
         
 
